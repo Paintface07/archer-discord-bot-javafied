@@ -1,5 +1,7 @@
 package org.kondrak.archer.bot;
 
+import org.kondrak.archer.bot.listener.MessageListener;
+import org.postgresql.ds.PGPoolingDataSource;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
@@ -12,9 +14,17 @@ public class ArcherMain {
 
     public static void main(String[] args) {
         try {
+            PGPoolingDataSource datasource = new PGPoolingDataSource();
+            datasource.setDataSourceName("pg datasource");
+            datasource.setServerName("localhost");
+            datasource.setDatabaseName("ARCHER_JAVA");
+            datasource.setUser(args[1]);
+            datasource.setPassword(args[2]);
+            datasource.setMaxConnections(5);
+
             IDiscordClient client = getClient(args[0], true);
             EventDispatcher dispatcher = client.getDispatcher();
-            dispatcher.registerListener(new MessageListener());
+            dispatcher.registerListener(new MessageListener(datasource));
         } catch(DiscordException dx) {
             throw new RuntimeException("Could not create discord client!");
         }
