@@ -31,10 +31,24 @@ public class MessageListener {
     @EventSubscriber
     public void onReadyEvent(ReadyEvent e) {
         System.out.println(e.getClass().getName());
-        List<IUser> users = userDao.getUsers();
-        users.forEach((user) -> {
-            System.out.println(user.getName());
-        });
+//        List<IUser> clientUsers = registry.getClient().getUsers();
+        List<IUser> u = registry.getClient().getUsers();
+
+        for(int i = 0; i < u.size(); i++) {
+            System.out.println("User* " + i + " " + u.get(i).getName() + " " + u.get(i).getID() + " " + u.get(i).getStatus().toString());
+        }
+
+        System.out.println(u.size());
+        for(int i = 0; i <u.size(); i++) {
+            System.out.println(u.size() + " " + u.get(i).getStatus().toString());
+            System.out.println("User! " + u.get(i).getName() + " " + u.get(i).getID());
+            boolean saved = userDao.userIsSaved(u.get(i).getID());
+            System.out.println("Saved*: " + u.get(i).getName());
+            if(!saved) {
+                System.out.println("Saved!: " + u.get(i).getName());
+                userDao.insertUser(u.get(i));
+            }
+        }
     }
 
     @EventSubscriber

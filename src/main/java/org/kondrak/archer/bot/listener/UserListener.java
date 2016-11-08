@@ -46,15 +46,13 @@ public class UserListener {
     @EventSubscriber
     public void onJoin(UserJoinEvent e) {
         System.out.println(e.getClass().getName());
-        List<IUser> users = userDao.getUsers();
-        users.forEach((user) -> {
+        List<IUser> clientUsers = registry.getClient().getUsers();
+        clientUsers.forEach((user) -> {
             System.out.println(user.getName());
         });
-        List<IUser> clientUsers = registry.getClient().getUsers();
-        for(IUser u : clientUsers) {
-            if(!userDao.userIsSaved(u.getID())) {
-                userDao.insertUser(u);
-            }
+        if(!userDao.userIsSaved(e.getUser().getID())) {
+            System.out.println("Saved: " + e.getUser().getName());
+            userDao.insertUser(e.getUser());
         }
     }
 

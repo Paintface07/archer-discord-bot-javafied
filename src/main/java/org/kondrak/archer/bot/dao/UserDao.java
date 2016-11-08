@@ -63,6 +63,7 @@ public class UserDao {
             st.setString(1, user.getID());
             st.setString(2, user.getName());
 
+            System.out.println("Inserting user: " + user.getName() + " " + user.getID());
             st.execute();
             return true;
         } catch(SQLException ex) {
@@ -75,14 +76,13 @@ public class UserDao {
         try {
             Connection conn = getConnection();
             PreparedStatement st = conn.prepareStatement(
-                    "SELECT user_id," +
-                            "FROM \"ARCHER\".users" +
+                    "SELECT user_id " +
+                            "FROM \"ARCHER\".users " +
                             "WHERE user_id = ?"
             );
 
             st.setString(1, userId);
             ResultSet rs = st.executeQuery();
-            List<IUser> users = new ArrayList<>();
             boolean value = rs.next();
             rs.close();
             st.close();

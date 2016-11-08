@@ -55,7 +55,7 @@ public class ArcherMain {
         datasource.setDatabaseName("ARCHER_JAVA");
         datasource.setUser(user);
         datasource.setPassword(password);
-        datasource.setMaxConnections(5);
+        datasource.setMaxConnections(50);
         return datasource;
     }
 
