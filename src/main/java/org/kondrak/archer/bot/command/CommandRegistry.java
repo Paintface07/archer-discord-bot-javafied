@@ -2,6 +2,7 @@ package org.kondrak.archer.bot.command;
 
 import com.google.common.collect.Lists;
 import org.kondrak.archer.bot.command.event.MessageEventCommand;
+import sx.blah.discord.api.IDiscordClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +14,10 @@ import java.util.List;
 public class CommandRegistry {
 
     private List<MessageEventCommand> commands = new ArrayList<>();
+    private final IDiscordClient client;
 
-    public CommandRegistry(MessageEventCommand... commands){
+    public CommandRegistry(IDiscordClient client, MessageEventCommand... commands){
+        this.client = client;
         registerAllCommands(commands);
     }
 
@@ -34,5 +37,9 @@ public class CommandRegistry {
 
     public List<MessageEventCommand> getCommandsAsList() {
         return Lists.newArrayList(commands);
+    }
+
+    public IDiscordClient getClient() {
+        return this.client;
     }
 }

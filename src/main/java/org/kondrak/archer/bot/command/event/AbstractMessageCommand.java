@@ -18,6 +18,22 @@ public abstract class AbstractMessageCommand implements MessageEventCommand<IMes
         this.client = client;
     }
 
+    @Override
+    public boolean shouldExecute(IMessage input) {
+        // default to making sure the content contains the command
+        return input.getContent().contains(command);
+    }
+
+    @Override
+    public void beforeExecute(IMessage input, IMessage output) {
+        // default to doing nothing
+    }
+
+    @Override
+    public void afterExecute(IMessage input, IMessage output) {
+        // default to doing nothing
+    }
+
     public String getCommand() {
         return this.command;
     }

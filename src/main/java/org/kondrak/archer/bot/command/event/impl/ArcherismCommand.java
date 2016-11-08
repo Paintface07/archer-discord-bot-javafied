@@ -21,11 +21,6 @@ public class ArcherismCommand extends AbstractMessageCommand {
     }
 
     @Override
-    public boolean shouldExecute(IMessage input) {
-        return input.getContent().contains("!archerism");
-    }
-
-    @Override
     public IMessage execute(IMessage input) {
         int rand = (int) (Math.random() * SAYINGS.size());
         String randMessage = SAYINGS.get(rand);
@@ -36,16 +31,6 @@ public class ArcherismCommand extends AbstractMessageCommand {
             System.out.println("Could not reply to message: " + input.getChannel().getName());
         }
         return null;
-    }
-
-    @Override
-    public void beforeExecute(IMessage input, IMessage output) {
-        throw new UnsupportedOperationException("beforeExecute not implemented");
-    }
-
-    @Override
-    public void afterExecute(IMessage input, IMessage output) {
-        throw new UnsupportedOperationException("beforeExecute not implemented");
     }
 
     private static List<String> SAYINGS = Lists.newArrayList(

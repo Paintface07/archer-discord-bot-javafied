@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.command.event.impl.ArcherismCommand;
+import org.kondrak.archer.bot.command.event.impl.HelpCommand;
 import org.kondrak.archer.bot.listener.MessageListener;
 import org.postgresql.ds.PGPoolingDataSource;
 import sx.blah.discord.api.ClientBuilder;
@@ -22,9 +23,12 @@ public class ArcherMain {
     public static void main(String[] args) {
         DataSource datasource = setupDataSource(args[1], args[2]);
         String config = readConfiguration("config/config.json");
-        CommandRegistry registry = new CommandRegistry();
-        IDiscordClient client = setupClient(args[0], datasource, registry);
+        IDiscordClient client = setupClient(args[0]);
+        CommandRegistry registry = new CommandRegistry(client);
         registry.register(new ArcherismCommand(client, registry, "!archerism"));
+        registry.register(new HelpCommand(client, registry, "!help"));
+        EventDispatcher dispatcher = client.getDispatcher();
+        dispatcher.registerListener(new MessageListener(datasource, registry));
     }
 
     private static String readConfiguration(String location) {
@@ -35,11 +39,9 @@ public class ArcherMain {
         }
     }
 
-    private static IDiscordClient setupClient(String appKey, DataSource datasource, CommandRegistry registry) {
+    private static IDiscordClient setupClient(String appKey) {
         try {
             IDiscordClient client = getClient(appKey, true);
-            EventDispatcher dispatcher = client.getDispatcher();
-            dispatcher.registerListener(new MessageListener(datasource, registry));
             return client;
         } catch(DiscordException dx) {
             throw new RuntimeException("Could not create discord client!");
