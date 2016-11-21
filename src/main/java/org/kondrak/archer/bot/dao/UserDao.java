@@ -1,11 +1,12 @@
 package org.kondrak.archer.bot.dao;
 
+import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.impl.obj.User;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Presences;
 
-import javax.sql.DataSource;
+import javax.sql.PooledConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,17 +19,19 @@ import java.util.List;
  */
 public class UserDao {
 
-    private final DataSource ds;
+    private final PGConnectionPoolDataSource ds;
     private final IDiscordClient client;
 
-    public UserDao(DataSource ds, IDiscordClient client) {
+    public UserDao(PGConnectionPoolDataSource ds, IDiscordClient client) {
         this.ds = ds;
         this.client = client;
     }
 
     public List<IUser> getUsers() {
+        PooledConnection pConn = null;
         try {
-            Connection conn = getConnection();
+            pConn = getConnection();
+            Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
                     "SELECT user_id," +
                             "username " +
@@ -46,13 +49,23 @@ public class UserDao {
             return users;
         } catch(SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            if(pConn != null) {
+                try {
+                    pConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
 
     public boolean insertUser(IUser user) {
+        PooledConnection pConn = null;
         try {
-            Connection conn = getConnection();
+            pConn = getConnection();
+            Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
                     "INSERT INTO \"ARCHER\".users (" +
                             "user_id," +
@@ -69,12 +82,22 @@ public class UserDao {
         } catch(SQLException ex) {
             ex.printStackTrace();
             return false;
+        } finally {
+            if(pConn != null) {
+                try {
+                    pConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public boolean userIsSaved(String userId) {
+        PooledConnection pConn = null;
         try {
-            Connection conn = getConnection();
+            pConn = getConnection();
+            Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
                     "SELECT user_id " +
                             "FROM \"ARCHER\".users " +
@@ -89,12 +112,43 @@ public class UserDao {
             return value;
         } catch(SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            if(pConn != null) {
+                try {
+                    pConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return false;
     }
 
-    private Connection getConnection() throws SQLException {
-        return ds.getConnection();
+    private PooledConnection getConnection() throws SQLException {
+        return ds.getPooledConnection();
+    }
+
+    private ResultSet executeQuery(PreparedStatement st) {
+        PooledConnection pConn = null;
+        try {
+            pConn = getConnection();
+            Connection conn = pConn.getConnection();
+            ResultSet rs = st.executeQuery();
+            rs.close();
+            st.close();
+            return rs;
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(pConn != null) {
+                try {
+                    pConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
 //    PreparedStatement st = conn.prepareStatement(

@@ -1,9 +1,10 @@
 package org.kondrak.archer.bot.dao;
 
 import org.kondrak.archer.bot.dao.utils.DateUtils;
+import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.handle.obj.IMessage;
 
-import javax.sql.DataSource;
+import javax.sql.PooledConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,15 +13,17 @@ import java.sql.SQLException;
  * Created by Administrator on 11/6/2016.
  */
 public class MessageDao {
-    private final DataSource ds;
+    private final PGConnectionPoolDataSource ds;
 
-    public MessageDao(DataSource ds) {
+    public MessageDao(PGConnectionPoolDataSource ds) {
         this.ds = ds;
     }
 
     public void saveMessage(IMessage msg) {
+        PooledConnection pConn = null;
         try {
-            Connection conn = ds.getConnection();
+            pConn = ds.getPooledConnection();
+            Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
                     "INSERT INTO \"ARCHER\".message (" +
                             "channel_id," +
@@ -40,6 +43,14 @@ public class MessageDao {
             st.execute();
         } catch(SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            if(pConn != null) {
+                try {
+                    pConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

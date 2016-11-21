@@ -6,13 +6,12 @@ import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.command.event.impl.ArcherismCommand;
 import org.kondrak.archer.bot.command.event.impl.HelpCommand;
 import org.kondrak.archer.bot.listener.MessageListener;
-import org.postgresql.ds.PGPoolingDataSource;
+import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.DiscordException;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 
 /**
@@ -21,7 +20,7 @@ import java.io.IOException;
 public class ArcherMain {
 
     public static void main(String[] args) {
-        DataSource datasource = setupDataSource(args[1], args[2]);
+        PGConnectionPoolDataSource datasource = setupDataSource(args[1], args[2]);
         String config = readConfiguration("config/config.json");
         IDiscordClient client = setupClient(args[0]);
         CommandRegistry registry = new CommandRegistry(client);
@@ -48,14 +47,12 @@ public class ArcherMain {
         }
     }
 
-    private static DataSource setupDataSource(String user, String password) {
-        PGPoolingDataSource datasource = new PGPoolingDataSource();
-        datasource.setDataSourceName("pg datasource");
+    private static PGConnectionPoolDataSource setupDataSource(String user, String password) {
+        PGConnectionPoolDataSource datasource = new PGConnectionPoolDataSource();
         datasource.setServerName("localhost");
         datasource.setDatabaseName("ARCHER_JAVA");
         datasource.setUser(user);
         datasource.setPassword(password);
-        datasource.setMaxConnections(50);
         return datasource;
     }
 
