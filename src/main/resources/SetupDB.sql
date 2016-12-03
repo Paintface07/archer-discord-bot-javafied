@@ -1,18 +1,27 @@
 -- CLEAN UP ANY PREEXISTING STRUCTURES
+DROP TABLE IF EXISTS guild CASCADE;
 DROP TABLE IF EXISTS role CASCADE;
 DROP TABLE IF EXISTS role_assignment CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 --------------------- CREATE NEW STRUCTURES ---------------------
---
---
+-- IMPLEMENTED STRUCTURES:
+--    - guild
+--    - role
+--    - role_assignment
+--    - users
+--    - message
+--    - channel
 -----------------------------------------------------------------
 
 -- CREATE GUILD STRUCTURES
 CREATE TABLE guild (
   guild_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
-  name VARCHAR(64) NOT NULL
+  name VARCHAR(64) NOT NULL,
+  icon VARCHAR(64),
+  iconURL VARCHAR(128),
+  owner_id VARCHAR(64) NOT NULL
 );
 
 CREATE UNIQUE INDEX guild_guild_id_uindex ON guild (
@@ -29,27 +38,13 @@ CREATE TABLE role (
   managed BOOLEAN NOT NULL DEFAULT FALSE,
   hoist BOOLEAN NOT NULL DEFAULT FALSE,
   mentionable BOOLEAN NOT NULL DEFAULT FALSE,
-  FOREIGN KEY (guild_id) REFERENCES guild(guild_id)
+  FOREIGN KEY (guild_id) REFERENCES guild(guild_id) ON DELETE RESTRICT
 );
 
 CREATE UNIQUE INDEX role_role_id_uindex ON role (
   role_id
 );
 -- END CREATE ROLE STRUCTURES
-
--- CREATE ROLE ASSIGNMENT STRUCTURES
-CREATE TABLE role_assignment (
-  assignment_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
-  role_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  FOREIGN KEY (role_id) REFERENCES role(role_id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
-CREATE UNIQUE INDEX role_role_id_uindex ON role (
-  assignment_id, role_id, user_id
-);
--- END CREATE ROLE ASSIGNMENT STRUCTURES
 
 -- CREATE USERS STRUCTURES
 CREATE TABLE users (
@@ -75,6 +70,36 @@ CREATE UNIQUE INDEX users_user_id_uindex ON users (
 COMMENT ON INDEX users_user_id_uindex IS 'Primary key index';
 -- END CREATE USERS STRUCTURES
 
+
+-- CREATE ROLE ASSIGNMENT STRUCTURES
+CREATE TABLE role_assignment (
+  assignment_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
+  role_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  FOREIGN KEY (role_id) REFERENCES role(role_id) ON DELETE RESTRICT,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX role_assignment_assignment_id_uindex ON role_assignment (
+  assignment_id, role_id, user_id
+);
+-- END CREATE ROLE ASSIGNMENT STRUCTURES
+
+-- CREATE CHANNEL STRUCTURES
+CREATE TABLE channel (
+  channel_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
+  name VARCHAR(64) NOT NULL,
+  isPrivate BOOLEAN NOT NULL DEFAULT FALSE,
+  parent BIGINT NOT NULL,
+  position BIGINT NOT NULL,
+  FOREIGN KEY (guild_id) REFERENCES guild(guild_id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX channel_channel_id_uindex ON channel (
+  channel_id
+);
+-- END CREATE CHANNEL STRUCTURES
+
 -- CREATE MESSAGE STRUCTURES
 CREATE TABLE message (
   message_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
@@ -85,7 +110,7 @@ CREATE TABLE message (
   edited TIMESTAMP NOT NULL,
   everyone BOOLEAN NOT NULL DEFAULT FALSE,
   isPinned BOOLEAN NOT NULL DEFAULT FALSE,
-  FOREIGN KEY (author) REFERENCES users(user_id)
+  FOREIGN KEY (author) REFERENCES users(user_id) ON DELETE RESTRICT
 );
 
 COMMENT ON COLUMN message.message_id IS 'The unique ID for a message.';
