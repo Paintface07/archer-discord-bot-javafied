@@ -1,5 +1,5 @@
 {
-  "serverKey": "MjM5NDcxNDIwNDcwNTkxNDk4.CvKwAA._d5EzLHaturNMNn5pq9GnQYlao4",
+  "serverKey": "SERVER_KEY_HERE",
   "triggers": [
     "!archerism",
     "!help"
