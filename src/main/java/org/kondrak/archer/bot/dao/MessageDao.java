@@ -25,7 +25,7 @@ public class MessageDao {
             pConn = ds.getPooledConnection();
             Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
-                    "INSERT INTO \"ARCHER\".message (" +
+                    "INSERT INTO message (" +
                             "channel_id," +
                             "author," +
                             "message_id," +

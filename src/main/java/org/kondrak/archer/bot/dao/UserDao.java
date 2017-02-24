@@ -35,7 +35,7 @@ public class UserDao {
             PreparedStatement st = conn.prepareStatement(
                     "SELECT user_id," +
                             "username " +
-                            "FROM \"ARCHER\".users"
+                            "FROM users"
             );
 
             ResultSet rs = st.executeQuery();
@@ -67,7 +67,7 @@ public class UserDao {
             pConn = getConnection();
             Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
-                    "INSERT INTO \"ARCHER\".users (" +
+                    "INSERT INTO users (" +
                             "user_id," +
                             "username " +
                             ") VALUES (?, ?)"
@@ -100,7 +100,7 @@ public class UserDao {
             Connection conn = pConn.getConnection();
             PreparedStatement st = conn.prepareStatement(
                     "SELECT user_id " +
-                            "FROM \"ARCHER\".users " +
+                            "FROM users " +
                             "WHERE user_id = ?"
             );
 

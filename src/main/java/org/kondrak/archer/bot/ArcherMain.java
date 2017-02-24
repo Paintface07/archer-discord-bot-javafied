@@ -50,7 +50,7 @@ public class ArcherMain {
     private static PGConnectionPoolDataSource setupDataSource(String user, String password) {
         PGConnectionPoolDataSource datasource = new PGConnectionPoolDataSource();
         datasource.setServerName("localhost");
-        datasource.setDatabaseName("ARCHER_JAVA");
+        datasource.setDatabaseName("archer_java");
         datasource.setUser(user);
         datasource.setPassword(password);
         return datasource;

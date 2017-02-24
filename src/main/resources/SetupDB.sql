@@ -1,5 +1,6 @@
 -- CLEAN UP ANY PREEXISTING STRUCTURES
 DROP TABLE IF EXISTS guild CASCADE;
+DROP TABLE IF EXISTS channel CASCADE;
 DROP TABLE IF EXISTS role CASCADE;
 DROP TABLE IF EXISTS role_assignment CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
@@ -48,7 +49,7 @@ CREATE UNIQUE INDEX role_role_id_uindex ON role (
 
 -- CREATE USERS STRUCTURES
 CREATE TABLE users (
-  user_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
+  user_id VARCHAR(32) PRIMARY KEY NOT NULL UNIQUE,
   username VARCHAR(32) NOT NULL,
   avatar VARCHAR(128),
   avatarURL VARCHAR(128),
@@ -75,7 +76,7 @@ COMMENT ON INDEX users_user_id_uindex IS 'Primary key index';
 CREATE TABLE role_assignment (
   assignment_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
   role_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
+  user_id VARCHAR(32) NOT NULL,
   FOREIGN KEY (role_id) REFERENCES role(role_id) ON DELETE RESTRICT,
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -87,12 +88,12 @@ CREATE UNIQUE INDEX role_assignment_assignment_id_uindex ON role_assignment (
 
 -- CREATE CHANNEL STRUCTURES
 CREATE TABLE channel (
-  channel_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
+  channel_id VARCHAR(32) PRIMARY KEY NOT NULL UNIQUE,
   name VARCHAR(64) NOT NULL,
   isPrivate BOOLEAN NOT NULL DEFAULT FALSE,
   parent BIGINT NOT NULL,
   position BIGINT NOT NULL,
-  FOREIGN KEY (guild_id) REFERENCES guild(guild_id) ON DELETE CASCADE
+  FOREIGN KEY (parent) REFERENCES guild(guild_id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX channel_channel_id_uindex ON channel (
@@ -102,12 +103,12 @@ CREATE UNIQUE INDEX channel_channel_id_uindex ON channel (
 
 -- CREATE MESSAGE STRUCTURES
 CREATE TABLE message (
-  message_id BIGINT PRIMARY KEY NOT NULL UNIQUE,
-  channel_id BIGINT NOT NULL,
-  author BIGINT NOT NULL,
+  message_id VARCHAR(32) PRIMARY KEY NOT NULL UNIQUE,
+  channel_id VARCHAR(32) NOT NULL,
+  author VARCHAR(32) NOT NULL,
   content VARCHAR(512),
   created TIMESTAMP NOT NULL,
-  edited TIMESTAMP NOT NULL,
+  edited TIMESTAMP,
   everyone BOOLEAN NOT NULL DEFAULT FALSE,
   isPinned BOOLEAN NOT NULL DEFAULT FALSE,
   FOREIGN KEY (author) REFERENCES users(user_id) ON DELETE RESTRICT
