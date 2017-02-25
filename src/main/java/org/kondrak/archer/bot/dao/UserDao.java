@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dao;
 
+import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.impl.obj.User;
@@ -22,9 +23,9 @@ public class UserDao {
     private final PGConnectionPoolDataSource ds;
     private final IDiscordClient client;
 
-    public UserDao(PGConnectionPoolDataSource ds, IDiscordClient client) {
-        this.ds = ds;
-        this.client = client;
+    public UserDao(ArcherBotContext ctx) {
+        this.ds = ctx.getDatasource();
+        this.client = ctx.getClient();
     }
 
     public List<IUser> getUsers() {
