@@ -33,6 +33,7 @@ public class ArcherismCommand extends AbstractMessageCommand {
             // IMessage m = new MessageBuilder(this.buildClient()).withContent(randMessage).build();
         } catch(MissingPermissionsException | RateLimitException | DiscordException ex) {
             System.out.println("Could not reply to message: " + input.getChannel().getName());
+            ex.printStackTrace();
         }
         return null;
     }
