@@ -70,7 +70,8 @@ public class MessageDao {
                     "FROM message " +
                     "  JOIN users " +
                     "    ON message.author = users.user_id " +
-                    "WHERE UPPER(content) LIKE '%" + word.toUpperCase() + "%' " +
+                    "WHERE UPPER(content) LIKE '%" + word.toUpperCase().replace("'", "''") + "%' " +
+                    "AND content NOT LIKE '%!word%' " +
                     "group by users.username";
 
             pConn = ds.getPooledConnection();
