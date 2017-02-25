@@ -19,6 +19,7 @@ public class HelpCommand extends AbstractMessageCommand {
             "==============================================================================\n" +
             "== **!archerism** - display a random archer quote\n" +
             "== **!help** - display help information on the commands you can use\n" +
+            "== **!word** - display the number of word usages by user\n" +
             "==============================================================================";
 
     public HelpCommand(ArcherBotContext ctx, String command) {
