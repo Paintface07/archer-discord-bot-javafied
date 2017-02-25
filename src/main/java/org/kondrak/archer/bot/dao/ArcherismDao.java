@@ -37,6 +37,8 @@ public class ArcherismDao {
                 String text = s.getString(2);
                 archerisms.add(new Archerism(trigger, text));
             }
+            s.close();
+            st.close();
             return archerisms;
         } catch(SQLException ex) {
             ex.printStackTrace();

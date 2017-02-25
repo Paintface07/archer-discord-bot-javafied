@@ -69,12 +69,20 @@ public class UserDao {
             PreparedStatement st = conn.prepareStatement(
                     "INSERT INTO users (" +
                             "user_id," +
-                            "username " +
-                            ") VALUES (?, ?)"
+                            "username," +
+                            "avatar," +
+                            "avatarurl," +
+                            "discriminator," +
+                            "isbot" +
+                            ") VALUES (?, ?, ?, ?, ?, ?)"
             );
 
             st.setString(1, user.getID());
             st.setString(2, user.getName());
+            st.setString(3, user.getAvatar());
+            st.setString(4, user.getAvatarURL());
+            st.setString(5, user.getDiscriminator());
+            st.setBoolean(6, user.isBot());
 
             System.out.println("Inserting user: " + user.getName() + " " + user.getID());
             st.execute();
@@ -150,11 +158,4 @@ public class UserDao {
         }
         return null;
     }
-
-//    PreparedStatement st = conn.prepareStatement(
-//            "INSERT INTO \"ARCHER\".users (" +
-//                    "user_id," +
-//                    "username," +
-//                    ") VALUES (?, ?, ?, ?, ?)"
-//    );
 }

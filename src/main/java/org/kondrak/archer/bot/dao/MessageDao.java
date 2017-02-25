@@ -30,8 +30,11 @@ public class MessageDao {
                             "author," +
                             "message_id," +
                             "content," +
-                            "created" +
-                            ") VALUES (?, ?, ?, ?, ?)"
+                            "created," +
+                            "edited," +
+                            "everyone," +
+                            "ispinned" +
+                            ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );
 
             st.setString(1, msg.getChannel().getID());
@@ -39,6 +42,9 @@ public class MessageDao {
             st.setString(3, msg.getID());
             st.setString(4, msg.getContent());
             st.setTimestamp(5, DateUtils.formatDate(msg.getCreationDate()));
+            st.setTimestamp(6, msg.getEditedTimestamp().isPresent() ? DateUtils.formatDate(msg.getEditedTimestamp().get()) : null);
+            st.setBoolean(7, msg.mentionsEveryone());
+            st.setBoolean(8, msg.isPinned());
 
             st.execute();
         } catch(SQLException ex) {

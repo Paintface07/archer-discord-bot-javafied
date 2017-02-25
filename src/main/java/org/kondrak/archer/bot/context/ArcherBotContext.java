@@ -4,6 +4,7 @@ import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.command.event.impl.ArcherismCommand;
 import org.kondrak.archer.bot.command.event.impl.HelpCommand;
 import org.kondrak.archer.bot.listener.MessageListener;
+import org.kondrak.archer.bot.listener.ReadyListener;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -31,6 +32,7 @@ public class ArcherBotContext {
 
         this.dispatcher = client.getDispatcher();
         dispatcher.registerListener(new MessageListener(this));
+        dispatcher.registerListener(new ReadyListener(this));
     }
 
     private static PGConnectionPoolDataSource setupDataSource(String user, String password) {
