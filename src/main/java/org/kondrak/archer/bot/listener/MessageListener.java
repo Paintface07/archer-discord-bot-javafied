@@ -1,9 +1,10 @@
 package org.kondrak.archer.bot.listener;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
+import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.MessageDao;
 import org.kondrak.archer.bot.dao.UserDao;
-import org.postgresql.ds.PGConnectionPoolDataSource;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.*;
 import sx.blah.discord.handle.obj.IMessage;
@@ -15,32 +16,24 @@ import java.util.List;
  * Created by Administrator on 11/3/2016.
  */
 public class MessageListener {
-
-    private final PGConnectionPoolDataSource ds;
-    private final CommandRegistry registry;
     private final MessageDao msgDao;
     private final UserDao userDao;
+    private final IDiscordClient client;
+    private final CommandRegistry registry;
 
-    public MessageListener(PGConnectionPoolDataSource ds, CommandRegistry registry) {
-        this.ds = ds;
-        this.msgDao = new MessageDao(ds);
-        this.userDao = new UserDao(ds, registry.getClient());
-        this.registry = registry;
+    public MessageListener(ArcherBotContext ctx) {
+        this.client = ctx.getClient();
+        this.registry = ctx.getRegistry();
+        this.msgDao = new MessageDao(ctx.getDatasource());
+        this.userDao = new UserDao(ctx.getDatasource(), client);
     }
 
     @EventSubscriber
     public void onReadyEvent(ReadyEvent e) {
         System.out.println(e.getClass().getName());
-        List<IUser> u = registry.getClient().getUsers();
+        List<IUser> u = client.getUsers();
 
-//        for(int i = 0; i < u.size(); i++) {
-//            System.out.println("User* " + i + " " + u.get(i).getName() + " " + u.get(i).getID() + " " + u.get(i).getStatus().toString());
-//        }
-
-//        System.out.println(u.size());
         for(int i = 0; i <u.size(); i++) {
-//            System.out.println(u.size() + " " + u.get(i).getStatus().toString());
-//            System.out.println("User! " + u.get(i).getName() + " " + u.get(i).getID());
             boolean saved = userDao.userIsSaved(u.get(i).getID());
             if(!saved) {
                 System.out.println("Saved!: " + u.get(i).getName());

@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS role CASCADE;
 DROP TABLE IF EXISTS role_assignment CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS archerisms CASCADE;
 
 --------------------- CREATE NEW STRUCTURES ---------------------
 -- IMPLEMENTED STRUCTURES:
@@ -126,3 +127,65 @@ CREATE UNIQUE INDEX message_message_id_uindex ON message (
 
 COMMENT ON INDEX message_message_id_uindex IS 'Primary key index';
 -- END CREATE MESSAGE STRUCTURES
+
+-- START CREATE ARCHERISM STRUCTURE
+CREATE TABLE archerisms (
+  trigger_tx VARCHAR(16)  NOT NULL,
+  msg_tx     VARCHAR(512) NOT NULL
+);
+
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('help', '-----------------------------------------------------------------------------\n-- Available commands:\n-----------------------------------------------------------------------------\n-- * !archerism - display a random archer quote\n-- * !help - display help information on the commands you can use\n-----------------------------------------------------------------------------');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Do you want ants!?!  Because THAT is how you get ants.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','DANGER ZONE!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Danger zone.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','*whispers* Danger zone. *whispers*');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','LAAAANNNNAAAAAAAAAAAAAAAAAAAA!!!!!!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I swear to god I had something for this!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Phrasing.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Er, phrasing.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Phrasing?');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Boop.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Read a book.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','RAAAAMMMMPPPAAAAAAAGGGGEEEE!!!!!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Just the tip.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Do you not?');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Oh my god, is that Burt Reynolds!?');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Can''t?  Or won''t?');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I''ve never seen an oscelot!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Holy shit you guys, look at his little spots!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Look at his tufted ears!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','No, Cyril.  When they''re dead, they''re just hookers!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Just one.  I''m scared if I quit drinking all at once, the cumulative hangover will literally kill me.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','For I am a sinner in the hands of an angry god.  Bloody Mary, full of vodka, blessed are you among cocktails.  Pray for me now, and at the hour of my death, which I hope is soon.  Amen.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I can''t hear you over the sound of my giant, throbbing erection!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','You killed a black astronaut, Cyril!  That''s like killing a unicorn!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Sorry, that''s just a sympathy boner.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Hello, airplanes?  It''s blimps.  You win.  Bye.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','It''s like Meow-schwitz in there.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Relax, it''s North Korea, the nation-state equivalent of the short bus.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Those can''t seriously be your only shoes.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Big whoop!  I''m spooning a Barrett 50 cal.  I could kill a building.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I hate surprises.  Except surprise fellatio.  That, I like.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Eat a buffet of dicks.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Thanks, Jungle.  Eat a buffet of dicks.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Hm?  Sorry, I was picturing whore island.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Call Kenny Loggins ''cause you''re in the danger zone.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I''m not slurring my words, I''m talking in cursive.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','All I''ve had today is like six gummy bears, and some scotch.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Hooray for small miracles.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','M, as in Mancy.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Mawp.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Mawp!  Mawp!  Mawp!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','MAWP!  MAWP!  MAWP!  Mawp!  Mawp.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','It''s just like the gypsy woman said!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I am everybody''s type.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Your authority is not recognized in Fort Kickass.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I call it the Sterling Archer Triple-A Power Play, and yes, the A stands for awesome.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I have no response to that.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Hey, I know you''re upset, but if you ever mention my mother''s loins or their frothiness to me again, I don''t know what I''ll do ... but it will be bad. Now let''s go bury this dead hooker.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','He thinks he''s people!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','You know, if there''s one thing women totally love, it''s to be smothered by men.  Or choked, in your case.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','I''m getting my turtleneck.  I''m not defusing a bomb in this!');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Lying is like 95% of what I do.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Karate? The Dane Cook of martial arts? No, ISIS agents use Krav Maga.');
+INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Hey. Hey, proposition: first person to untie me, guy or gal, I will let him or her give me a handy. Come on, let''s share the milk of human kindness!');

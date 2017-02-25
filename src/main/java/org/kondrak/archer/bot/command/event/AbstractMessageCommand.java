@@ -1,6 +1,7 @@
 package org.kondrak.archer.bot.command.event;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
+import org.kondrak.archer.bot.context.ArcherBotContext;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IMessage;
 
@@ -8,14 +9,12 @@ import sx.blah.discord.handle.obj.IMessage;
  * Created by Administrator on 11/5/2016.
  */
 public abstract class AbstractMessageCommand implements MessageEventCommand<IMessage> {
+    private final ArcherBotContext ctx;
     private final String command;
-    private final CommandRegistry registry;
-    private final IDiscordClient client;
 
-    public AbstractMessageCommand(IDiscordClient client, CommandRegistry registry, String command) {
-        this.registry = registry;
+    public AbstractMessageCommand(ArcherBotContext ctx, String command) {
+        this.ctx = ctx;
         this.command = command;
-        this.client = client;
     }
 
     @Override
@@ -39,10 +38,10 @@ public abstract class AbstractMessageCommand implements MessageEventCommand<IMes
     }
 
     public CommandRegistry getRegistry() {
-        return this.registry;
+        return ctx.getRegistry();
     }
 
     public IDiscordClient getClient() {
-        return this.client;
+        return ctx.getClient();
     }
 }

@@ -1,8 +1,7 @@
 package org.kondrak.archer.bot.command.event.impl;
 
-import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
-import sx.blah.discord.api.IDiscordClient;
+import org.kondrak.archer.bot.context.ArcherBotContext;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MessageBuilder;
@@ -22,8 +21,8 @@ public class HelpCommand extends AbstractMessageCommand {
             "== **!help** - display help information on the commands you can use\n" +
             "==============================================================================";
 
-    public HelpCommand(IDiscordClient client, CommandRegistry registry, String command) {
-        super(client, registry, command);
+    public HelpCommand(ArcherBotContext ctx, String command) {
+        super(ctx, command);
     }
 
     @Override
