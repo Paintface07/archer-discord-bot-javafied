@@ -25,7 +25,7 @@ public class ArcherBotContext {
 
     public ArcherBotContext(String[] args) {
         this.args = args;
-        this.ds = setupDataSource(args[1], args[2]);
+        this.ds = setupDataSource(args[1], args[2], args[3]);
         this.client = setupClient(args[0]);
 
         this.registry = new CommandRegistry(client);
@@ -39,9 +39,9 @@ public class ArcherBotContext {
         dispatcher.registerListener(new ReadyListener(this));
     }
 
-    private static PGConnectionPoolDataSource setupDataSource(String user, String password) {
+    private static PGConnectionPoolDataSource setupDataSource(String server, String user, String password) {
         PGConnectionPoolDataSource datasource = new PGConnectionPoolDataSource();
-        datasource.setServerName("localhost");
+        datasource.setServerName(server);
         datasource.setDatabaseName("archer_java");
         datasource.setUser(user);
         datasource.setPassword(password);

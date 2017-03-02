@@ -53,10 +53,12 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
                     messageDao.saveMessage(m);
                     msgCount++;
                     m = iter.next();
-                    try {
-                        msg.load(100);
-                    } catch (RateLimitException e) {
-                        e.printStackTrace();
+                    if(msgCount % 50 == 0) {
+                        try {
+                            msg.load(100);
+                        } catch (RateLimitException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
