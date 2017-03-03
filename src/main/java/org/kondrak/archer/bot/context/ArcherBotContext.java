@@ -29,10 +29,10 @@ public class ArcherBotContext {
         this.client = setupClient(args[0]);
 
         this.registry = new CommandRegistry(client);
-        registry.register(new ArcherismCommand(this, "!archerism"));
-        registry.register(new HelpCommand(this, "!help"));
-        registry.register(new LoadExistingMessagesCommand(this, "!admin load"));
-        registry.register(new WordUsageCommand(this, "!word"));
+        registry.register(new ArcherismCommand(this, args[4] + "archerism"));
+        registry.register(new HelpCommand(this, args[4] + "help"));
+        registry.register(new LoadExistingMessagesCommand(this, args[4] + "admin load"));
+        registry.register(new WordUsageCommand(this, args[4] + "word"));
 
         this.dispatcher = client.getDispatcher();
         dispatcher.registerListener(new MessageListener(this));
