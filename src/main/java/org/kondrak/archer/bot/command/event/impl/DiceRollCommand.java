@@ -46,7 +46,7 @@ public class DiceRollCommand extends AbstractMessageCommand {
 
     @Override
     public String getFormatRegex() {
-        return "[0-9]{1,13}d[0-9]{1,13}";
+        return "[0-9]{1,3}d[0-9]{1,3}";
     }
 
     @Override
