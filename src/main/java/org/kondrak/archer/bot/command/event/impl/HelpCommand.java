@@ -19,7 +19,8 @@ public class HelpCommand extends AbstractMessageCommand {
             "==============================================================================\n" +
             "== **!archerism** - display a random archer quote\n" +
             "== **!help** - display help information on the commands you can use\n" +
-            "== **!word** - display the number of word usages by user\n" +
+            "== **!word <word/phrase>** - display the number of word usages by user\n" +
+            "== **!timer <ms> <name>** - start a timer\n"+
             "==============================================================================";
 
     public HelpCommand(ArcherBotContext ctx, String command) {

@@ -1,12 +1,12 @@
 package org.kondrak.archer.bot.command;
 
-import com.google.common.collect.Lists;
 import org.kondrak.archer.bot.command.event.MessageEventCommand;
 import sx.blah.discord.api.IDiscordClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Administrator on 11/4/2016.
@@ -36,7 +36,7 @@ public class CommandRegistry {
     }
 
     public List<MessageEventCommand> getCommandsAsList() {
-        return Lists.newArrayList(commands);
+        return commands.stream().collect(Collectors.toList());
     }
 
     public IDiscordClient getClient() {

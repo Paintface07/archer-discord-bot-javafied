@@ -1,10 +1,7 @@
 package org.kondrak.archer.bot.context;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
-import org.kondrak.archer.bot.command.event.impl.ArcherismCommand;
-import org.kondrak.archer.bot.command.event.impl.HelpCommand;
-import org.kondrak.archer.bot.command.event.impl.LoadExistingMessagesCommand;
-import org.kondrak.archer.bot.command.event.impl.WordUsageCommand;
+import org.kondrak.archer.bot.command.event.impl.*;
 import org.kondrak.archer.bot.listener.MessageListener;
 import org.kondrak.archer.bot.listener.ReadyListener;
 import org.postgresql.ds.PGConnectionPoolDataSource;
@@ -30,10 +27,12 @@ public class ArcherBotContext {
         final String prefix = args[4];
 
         this.registry = new CommandRegistry(client);
-        registry.register(new ArcherismCommand(this, prefix + "archerism"));
-        registry.register(new HelpCommand(this, prefix + "help"));
-        registry.register(new LoadExistingMessagesCommand(this, prefix + "admin load"));
-        registry.register(new WordUsageCommand(this, prefix + "word"));
+        registry.registerAll(
+                new ArcherismCommand(this, prefix + "archerism"),
+                new HelpCommand(this, prefix + "help"),
+                new LoadExistingMessagesCommand(this, prefix + "admin load"),
+                new WordUsageCommand(this, prefix + "word"),
+                new TimerCommand(this, prefix + "timer"));
 
         this.dispatcher = client.getDispatcher();
         dispatcher.registerListener(new MessageListener(this));

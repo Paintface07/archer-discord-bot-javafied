@@ -41,11 +41,7 @@ public class WordUsageCommand extends AbstractMessageCommand {
 
         try {
             input.reply(response);
-        } catch (MissingPermissionsException e) {
-            e.printStackTrace();
-        } catch (RateLimitException e) {
-            e.printStackTrace();
-        } catch (DiscordException e) {
+        } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
             e.printStackTrace();
         }
         return null;

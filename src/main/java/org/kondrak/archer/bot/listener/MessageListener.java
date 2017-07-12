@@ -29,7 +29,6 @@ public class MessageListener {
     public void onMessage(MessageReceivedEvent e) {
         IMessage msg = e.getMessage();
         System.out.println("Channel: " + msg.getChannel() + " Author: " + msg.getAuthor() + ": " + msg);
-        System.out.println("****************************************************************");
         msgDao.saveMessage(msg);
         registry.getCommandsAsList().forEach((cmd) -> {
             if(cmd.shouldExecute(msg)) {

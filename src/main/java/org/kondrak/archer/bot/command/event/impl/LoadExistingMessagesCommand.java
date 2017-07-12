@@ -49,9 +49,9 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
             if(m != null) {
                 while (iter.hasNext()) {
                     boolean alreadyExists = messageDao.messageExists(m.getID());
-                    System.out.println(( alreadyExists ? "Not loading" : "Loading ") + " message: " + m.getContent());
 
                     if(!alreadyExists) {
+                        System.out.println("Loading message: " + m.getContent());
                         messageDao.saveMessage(m);
                         msgCount++;
                     }
@@ -59,6 +59,7 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
                     m = iter.next();
                     if (msgCount % 50 == 0) {
                         try {
+                            System.out.println("Refreshing buffer @ " + msgCount);
                             msg.load(100);
                         } catch (RateLimitException e) {
                             e.printStackTrace();
