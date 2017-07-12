@@ -100,4 +100,36 @@ public class MessageDao {
 
         return new HashMap<>();
     }
+
+    public boolean messageExists(final String messageId) {
+        PooledConnection pConn = null;
+        try {
+            String like = "SELECT 1 " +
+                    "FROM message " +
+                    "WHERE message_id = '" + messageId + "' ";
+
+            pConn = ds.getPooledConnection();
+            Connection conn = pConn.getConnection();
+            PreparedStatement st = conn.prepareStatement(like);
+
+            Long result = 0L;
+            ResultSet rs = st.executeQuery();
+            while(rs.next()) {
+                result = rs.getLong(1);
+            }
+            return result > 0;
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(pConn != null) {
+                try {
+                    pConn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return true;    // if there was an error return true to avoid getting "stuck"
+    }
 }

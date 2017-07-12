@@ -60,6 +60,8 @@ public class ArcherBotContext {
     private static IDiscordClient buildClient(String token, boolean login) throws DiscordException {
         ClientBuilder clientBuilder = new ClientBuilder();
         clientBuilder.withToken(token);
+        System.out.println("Attempting login with: " + token);
+
         if (login) {
             return clientBuilder.login();
         } else {

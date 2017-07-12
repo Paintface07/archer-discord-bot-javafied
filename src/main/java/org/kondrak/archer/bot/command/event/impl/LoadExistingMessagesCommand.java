@@ -49,11 +49,16 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
             IMessage m = iter.next();
             if(m != null) {
                 while (iter.hasNext()) {
-                    System.out.println("Loading message: " + m.getContent());
-                    messageDao.saveMessage(m);
-                    msgCount++;
+                    boolean alreadyExists = messageDao.messageExists(m.getID());
+                    System.out.println(( alreadyExists ? "Not loading" : "Loading ") + " message: " + m.getContent());
+
+                    if(!alreadyExists) {
+                        messageDao.saveMessage(m);
+                        msgCount++;
+                    }
+
                     m = iter.next();
-                    if(msgCount % 50 == 0) {
+                    if (msgCount % 50 == 0) {
                         try {
                             msg.load(100);
                         } catch (RateLimitException e) {
