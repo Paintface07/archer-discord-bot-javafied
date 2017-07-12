@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,72 +65,85 @@ public class MessageDao {
     }
 
     public Map<String, Long> getTimesSaidByUser(final String word) {
-        PooledConnection pConn = null;
+        String searchWord = "%" + word.toUpperCase()
+                .replace("'", "''")
+                .replace("!", "!!")
+                .replace("%", "!%")
+                .replace("_", "!_")
+                .replace("[", "![") + "%";
+
+        String like = "SELECT users.username, count(*) " +
+                "FROM message " +
+                "  JOIN users " +
+                "    ON message.author = users.user_id " +
+                "WHERE UPPER(content) LIKE ? ESCAPE '!'" +
+                "AND content NOT LIKE '%!word%' " +
+                "group by users.username";
+
+        ResultSet resultSet = execute(ds, like, searchWord);
+
+        Map<String, Long> result = new HashMap<>();
         try {
-            String like = "SELECT users.username, count(*) " +
-                    "FROM message " +
-                    "  JOIN users " +
-                    "    ON message.author = users.user_id " +
-                    "WHERE UPPER(content) LIKE '%" + word.toUpperCase().replace("'", "''") + "%' " +
-                    "AND content NOT LIKE '%!word%' " +
-                    "group by users.username";
-
-            pConn = ds.getPooledConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(like);
-
-            Map<String, Long> result = new HashMap<>();
-            ResultSet rs = st.executeQuery();
-            while(rs.next()) {
-                String username = rs.getString(1);
-                Long count = rs.getLong(2);
+            while(resultSet.next()) {
+                String username = resultSet.getString(1);
+                Long count = resultSet.getLong(2);
                 result.put(username, count);
             }
+
             return result;
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return new HashMap<>();
     }
 
     public boolean messageExists(final String messageId) {
-        PooledConnection pConn = null;
-        try {
-            String like = "SELECT 1 " +
+        String like = "SELECT 1 " +
                     "FROM message " +
-                    "WHERE message_id = '" + messageId + "' ";
+                    "WHERE message_id = ? ";
+        ResultSet result = execute(ds, like, messageId);
 
-            pConn = ds.getPooledConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(like);
-
-            Long result = 0L;
-            ResultSet rs = st.executeQuery();
-            while(rs.next()) {
-                result = rs.getLong(1);
+        Long count = 0L;
+        try {
+            while (result.next()) {
+                count = result.getLong(1);
             }
-            return result > 0;
-        } catch(SQLException ex) {
+            return count > 0;
+        } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return true;    // if there was an error return true to avoid getting "stuck"
+    }
+
+    public static ResultSet execute(PGConnectionPoolDataSource ds, String query, String... arguments) {
+        if(arguments.length > 0) {
+            PooledConnection pConn = null;
+            try {
+                pConn = ds.getPooledConnection();
+                Connection conn = pConn.getConnection();
+                System.out.println(query);
+                PreparedStatement st = conn.prepareStatement(query);
+
+                for (int a = 0; a < arguments.length; a++) {
+                    st.setString(a + 1, arguments[a]);
+                }
+
+                return st.executeQuery();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                if (pConn != null) {
+                    try {
+                        pConn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

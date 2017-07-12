@@ -8,7 +8,8 @@ public enum Emote {
     THUMBS_UP(":thumbsup:"),
     THUMBS_DOWN(":thumbsdown:"),
     FLAG_US(":flag_us:"),
-    ALARM_CLOCK(":alarm_clock:");
+    ALARM_CLOCK(":alarm_clock:"),
+    FOX(":fox:");
 
     private final String emoteVal;
 
