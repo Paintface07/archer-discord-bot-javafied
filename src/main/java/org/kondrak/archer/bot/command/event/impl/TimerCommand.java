@@ -54,13 +54,10 @@ public class TimerCommand extends AbstractMessageCommand {
         return null;
     }
 
-    private static void handleFailure(IMessage input) {
-        try {
-            input.reply("Your timer command was improperly formatted.\n" +
-                    "Please use the following format:\n" +
-                    "\t* <prefix>timer [1-13 digit ms] [name]");
-        } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public String getFormatErrorMessage(IMessage input) {
+        return "Your timer command was improperly formatted.\n" +
+                "Please use the following format:\n" +
+                "\t* <prefix>timer [1-13 digit ms] [name]";
     }
 }

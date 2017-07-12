@@ -44,13 +44,10 @@ public class DiceRollCommand extends AbstractMessageCommand {
         return null;
     }
 
-    private static void handleFailure(IMessage input) {
-        try {
-            input.reply("Your dice roll command was improperly formatted.\n" +
-                    "Please use the following format:\n" +
-                    "\t* <prefix>roll [number]d[sides]");
-        } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public String getFormatErrorMessage(IMessage input) {
+        return "Your dice roll command was improperly formatted.\n" +
+                "Please use the following format:\n" +
+                "\t* <prefix>roll [number]d[sides]";
     }
 }
