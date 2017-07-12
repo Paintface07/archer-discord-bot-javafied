@@ -21,6 +21,7 @@ public class HelpCommand extends AbstractMessageCommand {
             "== **!help** - display help information on the commands you can use\n" +
             "== **!word <word/phrase>** - display the number of word usages by user\n" +
             "== **!timer <ms> <name>** - start a timer\n"+
+            "== **!roll <number>d<sides>** - roll one or more dice" +
             "==============================================================================";
 
     public HelpCommand(ArcherBotContext ctx, String command) {

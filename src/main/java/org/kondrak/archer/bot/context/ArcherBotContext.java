@@ -32,7 +32,8 @@ public class ArcherBotContext {
                 new HelpCommand(this, prefix + "help"),
                 new LoadExistingMessagesCommand(this, prefix + "admin load"),
                 new WordUsageCommand(this, prefix + "word"),
-                new TimerCommand(this, prefix + "timer"));
+                new TimerCommand(this, prefix + "timer"),
+                new DiceRollCommand(this, prefix + "roll"));
 
         this.dispatcher = client.getDispatcher();
         dispatcher.registerListener(new MessageListener(this));
