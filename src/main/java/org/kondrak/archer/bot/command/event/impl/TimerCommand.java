@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.command.event.impl;
 
+import org.kondrak.archer.bot.util.Emote;
 import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import sx.blah.discord.handle.obj.IMessage;
@@ -36,7 +37,7 @@ public class TimerCommand extends AbstractMessageCommand {
                     @Override
                     public void run() {
                         try {
-                            input.reply("Time for" + message + "!");
+                            input.reply(Emote.ALARM_CLOCK + " Time for" + message + "!");
                         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
                             e.printStackTrace();
                         }
