@@ -4,6 +4,7 @@ package org.kondrak.archer.bot.util;
  * Created by nosferatu on 7/12/17.
  */
 public enum Emote {
+    // TODO: add configurability for custom emote awareness
     THUMBS_UP(":thumbsup:"),
     THUMBS_DOWN(":thumbsdown:"),
     FLAG_US(":flag_us:"),

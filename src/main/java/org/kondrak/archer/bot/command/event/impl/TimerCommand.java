@@ -25,6 +25,7 @@ public class TimerCommand extends AbstractMessageCommand {
         String content = input.getContent().replace(getCommand()+ " ", "");
         System.out.println("Content " + (content.matches("[0-9]{1,13}[ ][A-z, ]+") ? "matches [" : "does not match [") + content + "]");
 
+        // TODO: make these regex if-statements configurable per command, maybe as part of shouldExecute
         if(content.matches("[0-9]{1,13}[ ][A-z, ]+")) {
             String[] parts = content.split(" ");
 

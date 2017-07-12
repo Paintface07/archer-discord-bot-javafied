@@ -37,16 +37,19 @@ public class MessageListener {
         });
     }
 
+    // TODO: add a mentions table that ties back to messages and/or message history
     @EventSubscriber
     public void onMention(MentionEvent e) {
         System.out.println(e.getClass().getName());
     }
 
+    // TODO: add deletes and a message history table to preserve message history
     @EventSubscriber
     public void onDelete(MessageDeleteEvent e) {
         System.out.println(e.getClass().getName());
     }
 
+    // TODO: add updates and a message history table to preserve message history
     @EventSubscriber
     public void onUpdate(MessageUpdateEvent e) {
         System.out.println(e.getClass().getName());
