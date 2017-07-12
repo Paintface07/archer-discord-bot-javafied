@@ -20,7 +20,7 @@ public abstract class AbstractMessageCommand implements MessageEventCommand<IMes
     @Override
     public boolean shouldExecute(IMessage input) {
         // default to making sure the content contains the command
-        return input.getContent().contains(command);
+        return null != input.getContent() && input.getContent().contains(command);
     }
 
     @Override

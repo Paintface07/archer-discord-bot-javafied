@@ -43,7 +43,6 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
             } catch (RateLimitException e) {
                 e.printStackTrace();
             }
-//            msg = c.getMessages();
 
             ListIterator<IMessage>iter =  msg.listIterator();
             IMessage m = iter.next();
