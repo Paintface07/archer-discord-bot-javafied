@@ -22,21 +22,21 @@ public class TimerCommand extends AbstractMessageCommand {
     @Override
     public IMessage execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
-        System.out.println("Content " + (content.matches("[0-9]{1,13}[ ]\\w*") ? "matches [" : "does not match [") + content + "]");
+        System.out.println("Content " + (content.matches("[0-9]{1,13}[ ][A-z, ]+") ? "matches [" : "does not match [") + content + "]");
 
-        if(content.matches("[0-9]{1,13}[ ]\\w*")) {
+        if(content.matches("[0-9]{1,13}[ ][A-z, ]+")) {
             String[] parts = content.split(" ");
 
-            if(parts.length == 2) {
+            if(parts.length >= 2) {
                 List<String> partsArray = Arrays.stream(parts).collect(Collectors.toList());
                 long wait = Long.valueOf(partsArray.get(0));
                 partsArray.remove(0);
-                String message = partsArray.stream().reduce("", (p, a) -> a += " ");
+                String message = partsArray.stream().reduce("", (a, p) -> a += " " + p);
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         try {
-                            input.reply("Time for " + message + "!");
+                            input.reply("Time for" + message + "!");
                         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
                             e.printStackTrace();
                         }

@@ -7,12 +7,6 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.stream.Collectors;
-
 /**
  * Created by nosferatu on 7/11/17.
  */
