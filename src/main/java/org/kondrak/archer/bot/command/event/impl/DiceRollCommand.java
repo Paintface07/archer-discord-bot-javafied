@@ -19,9 +19,9 @@ public class DiceRollCommand extends AbstractMessageCommand {
     @Override
     public IMessage execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
-        System.out.println("Content " + (content.matches("[0-9]{1,13}d[0-9]{1,13}") ? "matches [" : "does not match [") + content + "]");
+        System.out.println("Content " + (content.matches(getFormatRegex()) ? "matches [" : "does not match [") + content + "]");
 
-        if(content.matches("[0-9]{1,13}d[0-9]{1,13}")) {
+        if(content.matches(getFormatRegex())) {
             String[] parts = content.replace(" ", "").split("d");
             int number = Integer.valueOf(parts[0]);
             int sides = Integer.valueOf(parts[1]);
@@ -42,6 +42,11 @@ public class DiceRollCommand extends AbstractMessageCommand {
         }
 
         return null;
+    }
+
+    @Override
+    public String getFormatRegex() {
+        return "[0-9]{1,13}d[0-9]{1,13}";
     }
 
     @Override

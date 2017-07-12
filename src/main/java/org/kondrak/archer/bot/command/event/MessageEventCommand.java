@@ -27,4 +27,7 @@ public interface MessageEventCommand<T> extends BotCommand<IMessage, T> {
 
     @Override
     void handleFailure(IMessage input);
+
+    @Override
+    String getFormatRegex();
 }

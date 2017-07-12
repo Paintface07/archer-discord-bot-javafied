@@ -18,4 +18,6 @@ public interface BotCommand<Q, A> {
     void afterExecute(Q input, A output);
 
     void handleFailure(IMessage input);
+
+    String getFormatRegex();
 }
