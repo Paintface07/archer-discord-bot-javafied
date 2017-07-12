@@ -80,7 +80,8 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
 
     @Override
     public boolean shouldExecute(IMessage msg) {
-        if(msg.getContent().contains(getCommand()) && msg.getAuthor().getName().equals("Paintface07")
+        if(null != msg.getContent() && msg.getContent().contains(getCommand())
+                && msg.getAuthor().getName().equals("Paintface07")
                 && msg.getAuthor().getDiscriminator().equals("2733")) {
             return true;
         }
