@@ -1,5 +1,8 @@
 package org.kondrak.archer.bot.dao;
 
+import org.kondrak.archer.bot.dao.utils.DBOperation;
+import org.kondrak.archer.bot.dao.utils.QueryExecutor;
+import org.kondrak.archer.bot.dao.utils.StringParameter;
 import org.kondrak.archer.bot.model.Archerism;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 
@@ -9,7 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2/24/2017.
@@ -22,35 +27,22 @@ public class ArcherismDao {
     }
 
     public List<Archerism> getArcherisms() {
-        PooledConnection pConn = null;
-        try {
-            pConn = ds.getPooledConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(
-                    "SELECT trigger_tx, msg_tx FROM archerisms WHERE trigger_tx = '!archerism'"
-            );
+        String queryString = "SELECT trigger_tx, msg_tx FROM archerisms WHERE trigger_tx = '!archerism'";
+        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, queryString);
 
-            ResultSet s = st.executeQuery();
+        try {
             List<Archerism> archerisms = new ArrayList<>();
-            while(s.next()) {
-                String trigger = s.getString(1);
-                String text = s.getString(2);
+            while(resultSet.next()) {
+                String trigger = resultSet.getString(1);
+                String text = resultSet.getString(2);
                 archerisms.add(new Archerism(trigger, text));
             }
-            s.close();
-            st.close();
+
             return archerisms;
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
+
         return new ArrayList<>();
     }
 }
