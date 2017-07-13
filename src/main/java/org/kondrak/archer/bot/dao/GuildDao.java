@@ -1,8 +1,12 @@
 package org.kondrak.archer.bot.dao;
 
+import org.kondrak.archer.bot.dao.utils.DBOperation;
+import org.kondrak.archer.bot.dao.utils.QueryExecutor;
+import org.kondrak.archer.bot.dao.utils.StringParameter;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.handle.obj.IGuild;
 
+import javax.management.Query;
 import javax.sql.PooledConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,65 +24,27 @@ public class GuildDao {
     }
 
     public boolean guildIsSaved(IGuild guild) {
-        PooledConnection pConn = null;
-        try {
-            pConn = ds.getPooledConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(
-                    "SELECT guild_id " +
+        String query = "SELECT guild_id " +
                             "FROM guild " +
-                            "WHERE guild_id = ?"
-            );
+                            "WHERE guild_id = ?";
 
-            st.setString(1, guild.getID());
-            ResultSet rs = st.executeQuery();
-            boolean value = rs.next();
-            rs.close();
-            st.close();
-            return value;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, query, new StringParameter(guild.getID()));
+        try {
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    public boolean addGuild(IGuild guild) {
-        PooledConnection pConn = null;
-        try {
-            pConn = ds.getPooledConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(
-                    "INSERT INTO guild (guild_id, name, icon, iconurl, owner_id) VALUES (?, ?, ?, ?, ?)"
-            );
+    public void addGuild(IGuild guild) {
+        String query = "INSERT INTO guild (guild_id, name, icon, iconurl, owner_id) VALUES (?, ?, ?, ?, ?)";
 
-            st.setString(1, guild.getID());
-            st.setString(2, guild.getName());
-            st.setString(3, guild.getIcon());
-            st.setString(4, guild.getIconURL());
-            st.setString(5, guild.getOwnerID());
-
-            st.execute();
-            return true;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return false;
+        QueryExecutor.execute(ds, DBOperation.INSERT, query,
+                new StringParameter(guild.getID()),
+                new StringParameter(guild.getName()),
+                new StringParameter(guild.getIcon()),
+                new StringParameter(guild.getIconURL()),
+                new StringParameter(guild.getOwnerID()));
     }
 }

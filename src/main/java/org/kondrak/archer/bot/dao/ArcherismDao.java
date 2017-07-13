@@ -32,6 +32,8 @@ public class ArcherismDao {
 
         try {
             List<Archerism> archerisms = new ArrayList<>();
+
+            // TODO: refactor output processing to be more abstract so each query doesn't need to process its own distinct result set
             while(resultSet.next()) {
                 String trigger = resultSet.getString(1);
                 String text = resultSet.getString(2);
