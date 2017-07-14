@@ -31,7 +31,7 @@ public final class QueryExecutor {
         try {
             pConn = ds.getPooledConnection();
             Connection conn = pConn.getConnection();
-            System.out.println(query);
+            // System.out.println(query);
             PreparedStatement st = conn.prepareStatement(query);
 
             for (int a = 0; a < arguments.length; a++) {

@@ -5,16 +5,18 @@ import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
+import org.kondrak.archer.bot.model.User;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.handle.impl.obj.User;
+import sx.blah.discord.handle.impl.obj.PresenceImpl;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Presences;
+import sx.blah.discord.handle.obj.StatusType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Administrator on 11/6/2016.
@@ -29,15 +31,16 @@ public class UserDao {
         this.client = ctx.getClient();
     }
 
-    public List<IUser> getUsers() {
+    public List<User> getUsers() {
         String query = "SELECT user_id, username FROM users";
 
         ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, query);
 
-        List<IUser> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         try {
             while(resultSet.next()) {
-                users.add(new User(client, resultSet.getString(2), resultSet.getString(1), "", "", Presences.ONLINE, false));
+                users.add(new User(client, resultSet.getString(2), resultSet.getString(1),
+                        "", "", new PresenceImpl(Optional.empty(), Optional.empty(), StatusType.ONLINE), false));
             }
             return users;
         } catch (SQLException e) {

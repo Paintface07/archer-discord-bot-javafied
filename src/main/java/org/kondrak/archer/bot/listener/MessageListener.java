@@ -3,6 +3,8 @@ package org.kondrak.archer.bot.listener;
 import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.MessageDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MentionEvent;
@@ -15,6 +17,9 @@ import sx.blah.discord.handle.obj.IMessage;
  * Created by Administrator on 11/3/2016.
  */
 public class MessageListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageListener.class);
+
     private final MessageDao msgDao;
     private final IDiscordClient client;
     private final CommandRegistry registry;
@@ -28,7 +33,7 @@ public class MessageListener {
     @EventSubscriber
     public void onMessage(MessageReceivedEvent e) {
         IMessage msg = e.getMessage();
-        System.out.println("Channel: " + msg.getChannel() + " Author: " + msg.getAuthor() + ": " + msg);
+        LOG.info("Channel: {} Author: {} - {}", msg.getChannel(),  msg.getAuthor(),  msg);
         msgDao.saveMessage(msg);
         registry.getCommandsAsList().forEach((cmd) -> {
             if(cmd.shouldExecute(msg)) {

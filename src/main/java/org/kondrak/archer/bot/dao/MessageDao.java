@@ -47,7 +47,7 @@ public class MessageDao {
                 new BooleanParameter(msg.isPinned()));
     }
 
-    public Map<String, Long> getTimesSaidByUser(final String word) {
+    public Map<String, Long> getTimesSaidByUser(final String guild, final String word) {
         String searchWord = "%" + QueryExecutor.sanitize(word.toUpperCase()) + "%";
 
         // TODO: make the bot's "self" ID configurable, or dynamically populated
@@ -55,12 +55,19 @@ public class MessageDao {
                 "FROM message " +
                 "  JOIN users " +
                 "    ON message.author = users.user_id " +
+                "  JOIN channel " +
+                "    ON message.channel_id = channel.channel_id" +
+                "  JOIN guild " +
+                "    ON channel.parent = guild.guild_id " +
                 "WHERE UPPER(content) LIKE ? ESCAPE '!'" +
                 "AND content NOT LIKE '%!word%' " +
                 "AND author <> '239471420470591498'" +
+                "AND guild.guild_id = ?" +
                 "group by users.username";
 
-        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, like, new StringParameter(searchWord));
+        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, like,
+                new StringParameter(searchWord),
+                new StringParameter(guild));
 
         Map<String, Long> result = new HashMap<>();
         try {
