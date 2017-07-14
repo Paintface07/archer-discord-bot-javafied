@@ -3,6 +3,8 @@ package org.kondrak.archer.bot.command.event.impl;
 import org.kondrak.archer.bot.util.Emote;
 import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
 import org.kondrak.archer.bot.context.ArcherBotContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
  */
 public class TimerCommand extends AbstractMessageCommand {
 
+    public static final Logger LOG = LoggerFactory.getLogger(TimerCommand.class);
+
     public TimerCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
     }
@@ -23,9 +27,8 @@ public class TimerCommand extends AbstractMessageCommand {
     @Override
     public IMessage execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
-        System.out.println("Content " + (content.matches(getFormatRegex()) ? "matches [" : "does not match [") + content + "]");
+        LOG.info("Content {}{}]", (content.matches(getFormatRegex()) ? "matches [" : "does not match ["), content);
 
-        // TODO: make these regex if-statements configurable per command, maybe as part of shouldExecute
         if(content.matches(getFormatRegex())) {
             String[] parts = content.split(" ");
 

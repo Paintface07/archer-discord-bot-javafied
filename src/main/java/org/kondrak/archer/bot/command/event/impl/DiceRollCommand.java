@@ -2,6 +2,8 @@ package org.kondrak.archer.bot.command.event.impl;
 
 import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
 import org.kondrak.archer.bot.context.ArcherBotContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -12,6 +14,8 @@ import sx.blah.discord.util.RateLimitException;
  */
 public class DiceRollCommand extends AbstractMessageCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DiceRollCommand.class);
+
     public DiceRollCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
     }
@@ -19,7 +23,7 @@ public class DiceRollCommand extends AbstractMessageCommand {
     @Override
     public IMessage execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
-        System.out.println("Content " + (content.matches(getFormatRegex()) ? "matches [" : "does not match [") + content + "]");
+        LOG.info("Content {}{}]", (content.matches(getFormatRegex()) ? "matches [" : "does not match ["), content);
 
         if(content.matches(getFormatRegex())) {
             String[] parts = content.replace(" ", "").split("d");

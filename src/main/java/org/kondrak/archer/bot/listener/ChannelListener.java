@@ -1,6 +1,8 @@
 package org.kondrak.archer.bot.listener;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.*;
 
@@ -10,6 +12,9 @@ import javax.sql.DataSource;
  * Created by Administrator on 11/7/2016.
  */
 public class ChannelListener {
+
+    private final Logger LOG = LoggerFactory.getLogger(ChannelListener.class);
+
     private final DataSource ds;
     private final CommandRegistry registry;
 
@@ -20,31 +25,31 @@ public class ChannelListener {
 
     @EventSubscriber
     public void onCreate(ChannelCreateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onDelete(ChannelDeleteEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onUpdate(ChannelUpdateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceChannelCreate(VoiceChannelCreateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceChannelDelete(VoiceChannelDeleteEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceChannelUpdate(VoiceChannelUpdateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 }

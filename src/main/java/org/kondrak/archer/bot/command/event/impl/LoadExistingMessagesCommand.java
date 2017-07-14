@@ -3,6 +3,8 @@ package org.kondrak.archer.bot.command.event.impl;
 import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.MessageDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
@@ -18,6 +20,8 @@ import java.util.ListIterator;
  */
 public class LoadExistingMessagesCommand extends AbstractMessageCommand {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LoadExistingMessagesCommand.class);
+
     private MessageDao messageDao;
 
     public LoadExistingMessagesCommand(ArcherBotContext ctx, String command) {
@@ -32,7 +36,7 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
         int channelCount = 0;
         int msgCount = 0;
         for(IChannel c : channels) {
-            System.out.println("Loading from channel: " + c.getName());
+            LOG.info("Loading from channel: {}", c.getName());
             channelCount++;
 
             MessageList msg = new MessageList(input.getClient(), c);
@@ -51,7 +55,7 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
                     boolean alreadyExists = messageDao.messageExists(m.getID());
 
                     if(!alreadyExists) {
-                        System.out.println("Loading message: " + m.getContent());
+                        LOG.info("Loading message: {}", m.getContent());
                         messageDao.saveMessage(m);
                         msgCount++;
                     }
@@ -59,7 +63,7 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
                     m = iter.next();
                     if (msgCount % 50 == 0) {
                         try {
-                            System.out.println("Refreshing buffer @ " + msgCount);
+                            LOG.info("=== Refreshing buffer @ {} ===", msgCount);
                             msg.load(100);
                         } catch (RateLimitException e) {
                             e.printStackTrace();
@@ -72,7 +76,7 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
         try {
             input.reply(msgCount + " messages loaded from " + channelCount + " channels");
         } catch(MissingPermissionsException | RateLimitException | DiscordException ex) {
-            System.out.println("Could not reply to message: " + input.getChannel().getName());
+            LOG.error("Could not reply to message: {}", input.getChannel().getName());
             ex.printStackTrace();
         }
         return null;

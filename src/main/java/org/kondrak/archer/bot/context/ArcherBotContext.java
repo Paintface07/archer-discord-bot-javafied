@@ -5,6 +5,8 @@ import org.kondrak.archer.bot.command.event.impl.*;
 import org.kondrak.archer.bot.listener.MessageListener;
 import org.kondrak.archer.bot.listener.ReadyListener;
 import org.postgresql.ds.PGConnectionPoolDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
@@ -14,6 +16,9 @@ import sx.blah.discord.util.DiscordException;
  * Created by Administrator on 2/24/2017.
  */
 public class ArcherBotContext {
+
+    public static final Logger LOG = LoggerFactory.getLogger(ArcherBotContext.class);
+
     private final String[] args;
     private final PGConnectionPoolDataSource ds;
     private final IDiscordClient client;
@@ -61,7 +66,7 @@ public class ArcherBotContext {
     private static IDiscordClient buildClient(String token, boolean login) throws DiscordException {
         ClientBuilder clientBuilder = new ClientBuilder();
         clientBuilder.withToken(token);
-        System.out.println("Attempting login with: " + token);
+        LOG.info("Attempting login with: {}", token);
 
         if (login) {
             return clientBuilder.login();

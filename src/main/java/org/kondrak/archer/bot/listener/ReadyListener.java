@@ -4,6 +4,8 @@ import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.ChannelDao;
 import org.kondrak.archer.bot.dao.GuildDao;
 import org.kondrak.archer.bot.dao.UserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
@@ -17,6 +19,9 @@ import java.util.List;
  * Created by Administrator on 2/24/2017.
  */
 public class ReadyListener {
+
+    private final Logger LOG = LoggerFactory.getLogger(ReadyListener.class);
+
     private final ChannelDao channelDao;
     private final GuildDao guildDao;
     private final UserDao userDao;
@@ -31,7 +36,7 @@ public class ReadyListener {
 
     @EventSubscriber
     public void onReady(ReadyEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
         List<IUser> u = client.getUsers();
 
         for(int i = 0; i <u.size(); i++) {

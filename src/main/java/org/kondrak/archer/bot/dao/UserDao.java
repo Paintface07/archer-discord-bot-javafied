@@ -39,8 +39,7 @@ public class UserDao {
         List<User> users = new ArrayList<>();
         try {
             while(resultSet.next()) {
-                users.add(new User(client, resultSet.getString(2), resultSet.getString(1),
-                        "", "", new PresenceImpl(Optional.empty(), Optional.empty(), StatusType.ONLINE), false));
+                users.add(new User(resultSet.getString(2), resultSet.getString(1)));
             }
             return users;
         } catch (SQLException e) {

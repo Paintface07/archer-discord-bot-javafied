@@ -2,6 +2,8 @@ package org.kondrak.archer.bot.listener;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.dao.UserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.*;
 import sx.blah.discord.handle.obj.IUser;
@@ -13,6 +15,9 @@ import java.util.List;
  * Created by Administrator on 11/7/2016.
  */
 public class UserListener {
+
+    private final Logger LOG = LoggerFactory.getLogger(UserListener.class);
+
     private final DataSource ds;
     private final CommandRegistry registry;
     private final UserDao userDao;
@@ -25,27 +30,27 @@ public class UserListener {
 
     @EventSubscriber
     public void onNickChange(NickNameChangeEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onPresenceChange(PresenceUpdateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onStatusChange(StatusChangeEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onBan(UserBanEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onJoin(UserJoinEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
         List<IUser> clientUsers = registry.getClient().getUsers();
         clientUsers.forEach((user) -> {
             System.out.println(user.getName());
@@ -58,36 +63,36 @@ public class UserListener {
 
     @EventSubscriber
     public void onLeave(UserLeaveEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onPardon(UserPardonEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onRoleUpdate(UserRoleUpdateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onUpdate(UserUpdateEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceJoin(UserVoiceChannelJoinEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceLeave(UserVoiceChannelLeaveEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceMove(UserVoiceChannelMoveEvent e) {
-        System.out.println(e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 }
