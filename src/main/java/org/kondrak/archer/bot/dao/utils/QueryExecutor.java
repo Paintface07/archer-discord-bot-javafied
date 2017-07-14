@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dao.utils;
 
+import org.kondrak.archer.bot.dao.utils.parameter.Parameter;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 
 import javax.sql.PooledConnection;
@@ -15,6 +16,14 @@ public final class QueryExecutor {
 
     private QueryExecutor() {
         // empty by design
+    }
+
+    public static String sanitize(String st) {
+        return st.replace("'", "''")
+                .replace("!", "!!")
+                .replace("%", "!%")
+                .replace("_", "!_")
+                .replace("[", "![");
     }
 
     public static ResultSet execute(PGConnectionPoolDataSource ds, DBOperation op, String query, Parameter... arguments) {

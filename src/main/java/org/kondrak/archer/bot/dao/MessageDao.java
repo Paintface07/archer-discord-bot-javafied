@@ -1,12 +1,14 @@
 package org.kondrak.archer.bot.dao;
 
 import org.kondrak.archer.bot.dao.utils.*;
+import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
+import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
+import org.kondrak.archer.bot.dao.utils.parameter.TimestampParameter;
+import org.kondrak.archer.bot.dao.utils.result.LongResult;
+import org.kondrak.archer.bot.dao.utils.result.StringResult;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.handle.obj.IMessage;
 
-import javax.sql.PooledConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -46,12 +48,7 @@ public class MessageDao {
     }
 
     public Map<String, Long> getTimesSaidByUser(final String word) {
-        String searchWord = "%" + word.toUpperCase()
-                .replace("'", "''")
-                .replace("!", "!!")
-                .replace("%", "!%")
-                .replace("_", "!_")
-                .replace("[", "![") + "%";
+        String searchWord = "%" + QueryExecutor.sanitize(word.toUpperCase()) + "%";
 
         // TODO: make the bot's "self" ID configurable, or dynamically populated
         String like = "SELECT users.username, count(*) " +
@@ -68,8 +65,8 @@ public class MessageDao {
         Map<String, Long> result = new HashMap<>();
         try {
             while(resultSet.next()) {
-                String username = resultSet.getString(1);
-                Long count = resultSet.getLong(2);
+                String username = new StringResult(resultSet, 1).get();
+                Long count = new LongResult(resultSet, 2).get();
                 result.put(username, count);
             }
 
@@ -82,9 +79,7 @@ public class MessageDao {
     }
 
     public boolean messageExists(final String messageId) {
-        String like = "SELECT 1 " +
-                    "FROM message " +
-                    "WHERE message_id = ? ";
+        String like = "SELECT 1 FROM message WHERE message_id = ? ";
         ResultSet result = QueryExecutor.execute(ds, DBOperation.QUERY, like, new StringParameter(messageId));
 
         Long count = 0L;

@@ -2,14 +2,10 @@ package org.kondrak.archer.bot.dao;
 
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
-import org.kondrak.archer.bot.dao.utils.StringParameter;
+import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.handle.obj.IGuild;
 
-import javax.management.Query;
-import javax.sql.PooledConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

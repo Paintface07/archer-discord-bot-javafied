@@ -1,15 +1,16 @@
 package org.kondrak.archer.bot.dao;
 
 import org.kondrak.archer.bot.context.ArcherBotContext;
+import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
+import org.kondrak.archer.bot.dao.utils.DBOperation;
+import org.kondrak.archer.bot.dao.utils.QueryExecutor;
+import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.impl.obj.User;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Presences;
 
-import javax.sql.PooledConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,134 +30,55 @@ public class UserDao {
     }
 
     public List<IUser> getUsers() {
-        PooledConnection pConn = null;
-        try {
-            pConn = getConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(
-                    "SELECT user_id," +
-                            "username " +
-                            "FROM users"
-            );
+        String query = "SELECT user_id, username FROM users";
 
-            ResultSet rs = st.executeQuery();
-            List<IUser> users = new ArrayList<>();
-            while (rs.next()) {
-                IUser user = new User(client, rs.getString(2), rs.getString(1), "", "", Presences.ONLINE, false);
-                users.add(user);
+        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, query);
+
+        List<IUser> users = new ArrayList<>();
+        try {
+            while(resultSet.next()) {
+                users.add(new User(client, resultSet.getString(2), resultSet.getString(1), "", "", Presences.ONLINE, false));
             }
-            rs.close();
-            st.close();
             return users;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return null;
+
+        return new ArrayList<>();
     }
 
     public boolean insertUser(IUser user) {
-        PooledConnection pConn = null;
-        try {
-            pConn = getConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(
-                    "INSERT INTO users (" +
-                            "user_id," +
-                            "username," +
-                            "avatar," +
-                            "avatarurl," +
-                            "discriminator," +
-                            "isbot" +
-                            ") VALUES (?, ?, ?, ?, ?, ?)"
-            );
+        String query = "INSERT INTO users (" +
+                "user_id," +
+                "username," +
+                "avatar," +
+                "avatarurl," +
+                "discriminator," +
+                "isbot" +
+                ") VALUES (?, ?, ?, ?, ?, ?)";
 
-            st.setString(1, user.getID());
-            st.setString(2, user.getName());
-            st.setString(3, user.getAvatar());
-            st.setString(4, user.getAvatarURL());
-            st.setString(5, user.getDiscriminator());
-            st.setBoolean(6, user.isBot());
+        QueryExecutor.execute(ds, DBOperation.INSERT, query,
+                new StringParameter(user.getID()),
+                new StringParameter(user.getName()),
+                new StringParameter(user.getAvatar()),
+                new StringParameter(user.getAvatarURL()),
+                new StringParameter(user.getDiscriminator()),
+                new BooleanParameter(user.isBot()));
 
-            System.out.println("Inserting user: " + user.getName() + " " + user.getID());
-            st.execute();
-            return true;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        return true;
     }
 
     public boolean userIsSaved(String userId) {
-        PooledConnection pConn = null;
-        try {
-            pConn = getConnection();
-            Connection conn = pConn.getConnection();
-            PreparedStatement st = conn.prepareStatement(
-                    "SELECT user_id " +
-                            "FROM users " +
-                            "WHERE user_id = ?"
-            );
+        String query = "SELECT user_id FROM users WHERE user_id = ?";
 
-            st.setString(1, userId);
-            ResultSet rs = st.executeQuery();
-            boolean value = rs.next();
-            rs.close();
-            st.close();
-            return value;
-        } catch(SQLException ex) {
+        ResultSet result = QueryExecutor.execute(ds, DBOperation.QUERY, query, new StringParameter(userId));
+
+        try {
+            return result.next();
+        } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
+
         return false;
-    }
-
-    private PooledConnection getConnection() throws SQLException {
-        return ds.getPooledConnection();
-    }
-
-    private ResultSet executeQuery(PreparedStatement st) {
-        PooledConnection pConn = null;
-        try {
-            pConn = getConnection();
-            Connection conn = pConn.getConnection();
-            ResultSet rs = st.executeQuery();
-            rs.close();
-            st.close();
-            return rs;
-        } catch(SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if(pConn != null) {
-                try {
-                    pConn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
     }
 }

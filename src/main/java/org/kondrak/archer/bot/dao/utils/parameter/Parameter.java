@@ -1,4 +1,4 @@
-package org.kondrak.archer.bot.dao.utils;
+package org.kondrak.archer.bot.dao.utils.parameter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

@@ -1,9 +1,8 @@
-package org.kondrak.archer.bot.dao.utils;
+package org.kondrak.archer.bot.dao.utils.parameter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  * Created by nosferatu on 7/12/17.
