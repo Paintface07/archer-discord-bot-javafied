@@ -16,17 +16,14 @@ import sx.blah.discord.handle.obj.IMessage;
 /**
  * Created by Administrator on 11/3/2016.
  */
-public class MessageListener {
+public class MessageListener extends AbstractListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageListener.class);
 
     private final MessageDao msgDao;
-    private final IDiscordClient client;
-    private final CommandRegistry registry;
 
     public MessageListener(ArcherBotContext ctx) {
-        this.client = ctx.getClient();
-        this.registry = ctx.getRegistry();
+        super(ctx);
         this.msgDao = new MessageDao(ctx.getDatasource());
     }
 
@@ -35,7 +32,7 @@ public class MessageListener {
         IMessage msg = e.getMessage();
         LOG.info("Channel: {} Author: {} - {}", msg.getChannel(),  msg.getAuthor(),  msg);
         msgDao.saveMessage(msg);
-        registry.getCommandsAsList().forEach((cmd) -> {
+        getRegistry().getCommandsAsList().forEach((cmd) -> {
             if(cmd.shouldExecute(msg)) {
                 cmd.execute(msg);
             }

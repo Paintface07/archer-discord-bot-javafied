@@ -5,6 +5,7 @@ import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
+import org.kondrak.archer.bot.dao.utils.result.StringResult;
 import org.kondrak.archer.bot.model.User;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.api.IDiscordClient;
@@ -24,11 +25,9 @@ import java.util.Optional;
 public class UserDao {
 
     private final PGConnectionPoolDataSource ds;
-    private final IDiscordClient client;
 
-    public UserDao(ArcherBotContext ctx) {
-        this.ds = ctx.getDatasource();
-        this.client = ctx.getClient();
+    public UserDao(PGConnectionPoolDataSource ds) {
+        this.ds = ds;
     }
 
     public List<User> getUsers() {
@@ -39,7 +38,8 @@ public class UserDao {
         List<User> users = new ArrayList<>();
         try {
             while(resultSet.next()) {
-                users.add(new User(resultSet.getString(2), resultSet.getString(1)));
+                users.add(new User(new StringResult(resultSet, 2).get(),
+                        new StringResult(resultSet, 1).get()));
             }
             return users;
         } catch (SQLException e) {

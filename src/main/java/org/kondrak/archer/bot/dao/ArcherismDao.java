@@ -2,6 +2,7 @@ package org.kondrak.archer.bot.dao;
 
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
+import org.kondrak.archer.bot.dao.utils.result.StringResult;
 import org.kondrak.archer.bot.model.Archerism;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 
@@ -29,8 +30,8 @@ public class ArcherismDao {
 
             // TODO: refactor output processing to be more abstract so each query doesn't need to process its own distinct result set
             while(resultSet.next()) {
-                String trigger = resultSet.getString(1);
-                String text = resultSet.getString(2);
+                String trigger = new StringResult(resultSet, 1).get();
+                String text = new StringResult(resultSet, 2).get();
                 archerisms.add(new Archerism(trigger, text));
             }
 

@@ -18,26 +18,25 @@ import java.util.List;
 /**
  * Created by Administrator on 2/24/2017.
  */
-public class ReadyListener {
+public class ReadyListener extends AbstractListener {
 
     private final Logger LOG = LoggerFactory.getLogger(ReadyListener.class);
 
     private final ChannelDao channelDao;
     private final GuildDao guildDao;
     private final UserDao userDao;
-    private final IDiscordClient client;
 
     public ReadyListener(ArcherBotContext ctx) {
+        super(ctx);
         this.channelDao = new ChannelDao(ctx.getDatasource());
         this.guildDao = new GuildDao(ctx.getDatasource());
-        this.userDao = new UserDao(ctx);
-        this.client = ctx.getClient();
+        this.userDao = new UserDao(ctx.getDatasource());
     }
 
     @EventSubscriber
     public void onReady(ReadyEvent e) {
         LOG.info("Event triggered: {}", e.getClass().getName());
-        List<IUser> u = client.getUsers();
+        List<IUser> u = getClient().getUsers();
 
         for(int i = 0; i <u.size(); i++) {
             boolean saved = userDao.userIsSaved(u.get(i).getID());
