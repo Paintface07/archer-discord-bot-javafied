@@ -5,7 +5,18 @@ import org.kondrak.archer.bot.dao.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.*;
+import sx.blah.discord.handle.impl.events.StatusChangeEvent;
+import sx.blah.discord.handle.impl.events.guild.member.NicknameChangedEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserPardonEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserRoleUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.user.UserVoiceChannelJoinEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.user.UserVoiceChannelLeaveEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.user.UserVoiceChannelMoveEvent;
+import sx.blah.discord.handle.impl.events.user.PresenceUpdateEvent;
+import sx.blah.discord.handle.impl.events.user.UserUpdateEvent;
 import sx.blah.discord.handle.obj.IUser;
 
 import javax.sql.DataSource;
@@ -29,7 +40,7 @@ public class UserListener {
     }
 
     @EventSubscriber
-    public void onNickChange(NickNameChangeEvent e) {
+    public void onNickChange(NicknameChangedEvent e) {
         LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
@@ -96,3 +107,4 @@ public class UserListener {
         LOG.info("Event triggered: {}", e.getClass().getName());
     }
 }
+

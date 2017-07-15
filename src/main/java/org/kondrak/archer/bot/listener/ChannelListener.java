@@ -4,7 +4,12 @@ import org.kondrak.archer.bot.command.CommandRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.*;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelCreateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelDeleteEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.ChannelUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelCreateEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelDeleteEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelUpdateEvent;
 
 import javax.sql.DataSource;
 

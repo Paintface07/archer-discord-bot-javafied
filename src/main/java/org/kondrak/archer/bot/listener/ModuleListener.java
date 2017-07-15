@@ -4,8 +4,8 @@ import org.kondrak.archer.bot.command.CommandRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.ModuleDisabledEvent;
-import sx.blah.discord.handle.impl.events.ModuleEnabledEvent;
+import sx.blah.discord.handle.impl.events.module.ModuleDisabledEvent;
+import sx.blah.discord.handle.impl.events.module.ModuleEnabledEvent;
 
 import javax.sql.DataSource;
 
