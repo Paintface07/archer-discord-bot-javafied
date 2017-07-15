@@ -2,10 +2,7 @@ package org.kondrak.archer.bot.listener;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.context.ArcherBotContext;
-import org.kondrak.archer.bot.dao.MessageDao;
 import sx.blah.discord.api.IDiscordClient;
-
-import javax.sql.DataSource;
 
 /**
  * Created by nosferatu on 7/14/17.

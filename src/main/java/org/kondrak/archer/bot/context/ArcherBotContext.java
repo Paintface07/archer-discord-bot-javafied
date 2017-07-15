@@ -1,7 +1,12 @@
 package org.kondrak.archer.bot.context;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
-import org.kondrak.archer.bot.command.event.impl.*;
+import org.kondrak.archer.bot.command.event.impl.ArcherismCommand;
+import org.kondrak.archer.bot.command.event.impl.DiceRollCommand;
+import org.kondrak.archer.bot.command.event.impl.HelpCommand;
+import org.kondrak.archer.bot.command.event.impl.LoadExistingMessagesCommand;
+import org.kondrak.archer.bot.command.event.impl.TimerCommand;
+import org.kondrak.archer.bot.command.event.impl.WordUsageCommand;
 import org.kondrak.archer.bot.listener.MessageListener;
 import org.kondrak.archer.bot.listener.ReadyListener;
 import org.postgresql.ds.PGConnectionPoolDataSource;

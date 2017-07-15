@@ -2,9 +2,6 @@ package org.kondrak.archer.bot.command.event;
 
 import org.kondrak.archer.bot.command.BotCommand;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RateLimitException;
 
 /**
  * Created by Administrator on 11/5/2016.

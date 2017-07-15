@@ -6,7 +6,6 @@ import org.kondrak.archer.bot.dao.GuildDao;
 import org.kondrak.archer.bot.dao.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.obj.IChannel;

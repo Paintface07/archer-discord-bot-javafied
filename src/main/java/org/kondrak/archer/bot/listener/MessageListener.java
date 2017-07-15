@@ -1,11 +1,9 @@
 package org.kondrak.archer.bot.listener;
 
-import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.MessageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;

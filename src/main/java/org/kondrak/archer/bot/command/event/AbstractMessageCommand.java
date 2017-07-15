@@ -2,18 +2,11 @@ package org.kondrak.archer.bot.command.event;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.context.ArcherBotContext;
-import org.kondrak.archer.bot.util.Emote;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.stream.Collectors;
 
 /**
  * Created by Administrator on 11/5/2016.

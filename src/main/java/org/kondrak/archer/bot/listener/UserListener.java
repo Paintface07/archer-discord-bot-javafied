@@ -1,6 +1,5 @@
 package org.kondrak.archer.bot.listener;
 
-import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.UserDao;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import sx.blah.discord.handle.impl.events.user.PresenceUpdateEvent;
 import sx.blah.discord.handle.impl.events.user.UserUpdateEvent;
 import sx.blah.discord.handle.obj.IUser;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**

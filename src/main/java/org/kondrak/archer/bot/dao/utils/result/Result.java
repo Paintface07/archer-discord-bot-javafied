@@ -1,6 +1,5 @@
 package org.kondrak.archer.bot.dao.utils.result;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
