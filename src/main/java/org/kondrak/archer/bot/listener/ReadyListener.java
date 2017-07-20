@@ -38,7 +38,7 @@ public class ReadyListener extends AbstractListener {
         List<IUser> u = getClient().getUsers();
 
         for(int i = 0; i <u.size(); i++) {
-            boolean saved = userDao.userIsSaved(u.get(i).getID());
+            boolean saved = userDao.userIsSaved(u.get(i).getStringID());
             if(!saved) {
                 System.out.println("Saved!: " + u.get(i).getName());
                 userDao.insertUser(u.get(i));

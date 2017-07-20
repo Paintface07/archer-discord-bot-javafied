@@ -27,7 +27,7 @@ public class WordUsageCommand extends AbstractMessageCommand {
     public IMessage execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
-        List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getID(), content);
+        List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getStringID(), content);
 
         String response = "The word/phrase '" + content + "' has been used a total of ";
         String table = "";

@@ -46,11 +46,6 @@ public class UserListener extends AbstractListener {
     }
 
     @EventSubscriber
-    public void onStatusChange(StatusChangeEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
-    }
-
-    @EventSubscriber
     public void onBan(UserBanEvent e) {
         LOG.info("Event triggered: {}", e.getClass().getName());
     }
@@ -62,7 +57,7 @@ public class UserListener extends AbstractListener {
         clientUsers.forEach((user) -> {
             System.out.println(user.getName());
         });
-        if(!userDao.userIsSaved(e.getUser().getID())) {
+        if(!userDao.userIsSaved(e.getUser().getStringID())) {
             System.out.println("Saved: " + e.getUser().getName());
             userDao.insertUser(e.getUser());
         }
