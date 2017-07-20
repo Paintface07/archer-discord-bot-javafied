@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.kondrak.archer.bot.model.Statistic;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 

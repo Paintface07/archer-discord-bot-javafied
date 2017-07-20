@@ -20,7 +20,7 @@ public class WordUsageCommand extends AbstractMessageCommand {
 
     public WordUsageCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
-        messageDao = new MessageDao(ctx.getDatasource(), ctx.getFactory());
+        messageDao = new MessageDao(ctx.getFactory());
     }
 
     @Override

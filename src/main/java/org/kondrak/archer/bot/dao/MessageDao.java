@@ -19,8 +19,8 @@ public class MessageDao extends AbstractDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageDao.class);
 
-    public MessageDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
-        super(ds, factory);
+    public MessageDao(SqlSessionFactory factory) {
+        super(factory);
     }
 
     public void saveMessage(IMessage msg) {

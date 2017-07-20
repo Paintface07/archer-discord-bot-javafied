@@ -27,9 +27,9 @@ public class ReadyListener extends AbstractListener {
 
     public ReadyListener(ArcherBotContext ctx) {
         super(ctx);
-        this.channelDao = new ChannelDao(ctx.getDatasource(), ctx.getFactory());
-        this.guildDao = new GuildDao(ctx.getDatasource(), ctx.getFactory());
-        this.userDao = new UserDao(ctx.getDatasource(), ctx.getFactory());
+        this.channelDao = new ChannelDao(ctx.getFactory());
+        this.guildDao = new GuildDao(ctx.getFactory());
+        this.userDao = new UserDao(ctx.getFactory());
     }
 
     @EventSubscriber
