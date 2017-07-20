@@ -64,7 +64,7 @@ public class ArcherBotContext {
 
     private SqlSessionFactory configureMybatis(String server, String user, String password) {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
-        dataSource.setDatabaseName("archer_test_java");
+        dataSource.setDatabaseName("archer_java");
         dataSource.setUser(user);
         dataSource.setPassword(password);
         dataSource.setServerName(server);
@@ -79,7 +79,7 @@ public class ArcherBotContext {
     private static PGConnectionPoolDataSource setupDataSource(String server, String user, String password) {
         PGConnectionPoolDataSource datasource = new PGConnectionPoolDataSource();
         datasource.setServerName(server);
-        datasource.setDatabaseName("archer_test_java");
+        datasource.setDatabaseName("archer_java");
         datasource.setUser(user);
         datasource.setPassword(password);
         return datasource;
