@@ -1,10 +1,13 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.kondrak.archer.bot.dao.mappers.MessageMapper;
 import org.kondrak.archer.bot.model.Statistic;
 import org.postgresql.ds.PGConnectionPoolDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
 
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.List;
  * Created by Administrator on 11/6/2016.
  */
 public class MessageDao extends AbstractDao {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MessageDao.class);
 
     public MessageDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
         super(ds, factory);
@@ -32,6 +37,9 @@ public class MessageDao extends AbstractDao {
                 msg.isPinned());
             session.commit();
             session.close();
+        } catch(PersistenceException ex) {
+            LOG.error("Error saving message: ", ex);
+            session.rollback();
         } finally {
             session.close();
         }
@@ -58,19 +66,5 @@ public class MessageDao extends AbstractDao {
         } finally {
             session.close();
         }
-//        String like = "SELECT 1 FROM message WHERE message_id = ? ";
-//        ResultSet result = QueryExecutor.execute(ds, DBOperation.QUERY, like, new StringParameter(messageId));
-//
-//        Long count = 0L;
-//        try {
-//            while (result.next()) {
-//                count = result.getLong(1);
-//            }
-//            return count > 0;
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        return true;    // if there was an error return true to avoid getting "stuck"
     }
 }
