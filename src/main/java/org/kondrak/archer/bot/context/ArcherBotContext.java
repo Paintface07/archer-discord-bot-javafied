@@ -13,7 +13,7 @@ import org.kondrak.archer.bot.command.event.impl.HelpCommand;
 import org.kondrak.archer.bot.command.event.impl.LoadExistingMessagesCommand;
 import org.kondrak.archer.bot.command.event.impl.TimerCommand;
 import org.kondrak.archer.bot.command.event.impl.WordUsageCommand;
-import org.kondrak.archer.bot.dao.mappers.StatisticMapper;
+import org.kondrak.archer.bot.dao.mappers.MessageMapper;
 import org.kondrak.archer.bot.listener.MessageListener;
 import org.kondrak.archer.bot.listener.ReadyListener;
 import org.kondrak.archer.bot.listener.UserListener;
@@ -64,14 +64,15 @@ public class ArcherBotContext {
 
     private SqlSessionFactory configureMybatis(String server, String user, String password) {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
-        dataSource.setDatabaseName("archer_java");
+        dataSource.setDatabaseName("archer_test_java");
         dataSource.setUser(user);
         dataSource.setPassword(password);
         dataSource.setServerName(server);
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
         Environment environment = new Environment("development", transactionFactory, dataSource);
         Configuration configuration = new Configuration(environment);
-        configuration.addMapper(StatisticMapper.class);
+//        configuration.addMapper(MessageMapper.class);
+        configuration.addMappers("org.kondrak.archer.bot.dao.mappers");
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(configuration);
         return factory;
     }
@@ -79,7 +80,7 @@ public class ArcherBotContext {
     private static PGConnectionPoolDataSource setupDataSource(String server, String user, String password) {
         PGConnectionPoolDataSource datasource = new PGConnectionPoolDataSource();
         datasource.setServerName(server);
-        datasource.setDatabaseName("archer_java");
+        datasource.setDatabaseName("archer_test_java");
         datasource.setUser(user);
         datasource.setPassword(password);
         return datasource;

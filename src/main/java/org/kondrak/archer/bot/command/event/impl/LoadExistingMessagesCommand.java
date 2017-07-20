@@ -52,7 +52,7 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
             IMessage m = iter.next();
             if(m != null) {
                 while (iter.hasNext()) {
-                    boolean alreadyExists = messageDao.messageExists(m.getID());
+                    boolean alreadyExists = messageDao.messageExists(m.getStringID());
 
                     if(!alreadyExists) {
                         LOG.info("Loading message: {}", m.getContent());
