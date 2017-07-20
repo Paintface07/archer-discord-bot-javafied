@@ -1,12 +1,18 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.kondrak.archer.bot.dao.mappers.ChannelMapper;
+import org.kondrak.archer.bot.dao.mappers.GuildMapper;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
 import org.kondrak.archer.bot.dao.utils.parameter.LongParameter;
 import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
 import org.postgresql.ds.PGConnectionPoolDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IChannel;
 
 import java.sql.ResultSet;
@@ -17,34 +23,35 @@ import java.sql.SQLException;
  */
 public class ChannelDao extends AbstractDao {
 
+    public static final Logger LOG = LoggerFactory.getLogger(ChannelDao.class);
+
     public ChannelDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
         super(ds, factory);
     }
 
     public boolean channelIsSaved(IChannel channel) {
-        String query = "SELECT channel_id FROM channel WHERE channel_id = ?";
-
-        ResultSet result = QueryExecutor.execute(ds, DBOperation.QUERY, query, new StringParameter(channel.getID()));
-
+        SqlSession session = factory.openSession();
         try {
-            return result.next();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            Integer result = session.getMapper(ChannelMapper.class).channelExists(channel.getStringID());
+            session.close();
+            return null != result && result > 0;
+        } finally {
+            session.close();
         }
-
-        return false;
     }
 
-    public boolean addChannel(IChannel channel) {
-        String query = "INSERT INTO channel (channel_id, name, isprivate, parent, position) VALUES (?, ?, ?, ?, ?)";
-
-        QueryExecutor.execute(ds, DBOperation.INSERT, query,
-                new StringParameter(channel.getID()),
-                new StringParameter(channel.getName()),
-                new BooleanParameter(channel.isPrivate()),
-                new StringParameter(channel.getGuild().getID()),
-                new LongParameter((long) channel.getPosition()));
-
-        return true;
+    public void addChannel(IChannel channel) {
+        SqlSession session = factory.openSession();
+        try {
+            session.getMapper(ChannelMapper.class).addChannel(channel.getStringID(), channel.getName(),
+                    channel.isPrivate(), channel.getGuild().getStringID(), channel.getPosition());
+            session.commit();
+            session.close();
+        } catch(PersistenceException ex) {
+            LOG.error("Error saving channel: ", ex);
+            session.rollback();
+        } finally {
+            session.close();
+        }
     }
 }
