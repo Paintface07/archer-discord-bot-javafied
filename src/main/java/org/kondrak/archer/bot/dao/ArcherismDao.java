@@ -1,15 +1,12 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.kondrak.archer.bot.dao.utils.DBOperation;
-import org.kondrak.archer.bot.dao.utils.QueryExecutor;
-import org.kondrak.archer.bot.dao.utils.result.StringResult;
+import org.kondrak.archer.bot.dao.mappers.ArcherismMapper;
 import org.kondrak.archer.bot.model.Archerism;
+import org.kondrak.archer.bot.model.Statistic;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,24 +19,14 @@ public class ArcherismDao extends AbstractDao {
     }
 
     public List<Archerism> getArcherisms() {
-        String queryString = "SELECT trigger_tx, msg_tx FROM archerisms WHERE trigger_tx = '!archerism'";
-        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, queryString);
-
+        SqlSession session = factory.openSession();
         try {
-            List<Archerism> archerisms = new ArrayList<>();
-
-            // TODO: refactor output processing to be more abstract so each query doesn't need to process its own distinct result set
-            while(resultSet.next()) {
-                String trigger = new StringResult(resultSet, 1).get();
-                String text = new StringResult(resultSet, 2).get();
-                archerisms.add(new Archerism(trigger, text));
-            }
-
-            return archerisms;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            List<Archerism> stats = session.getMapper(ArcherismMapper.class)
+                    .getAllArcherisms();
+            session.close();
+            return stats;
+        } finally {
+            session.close();
         }
-
-        return new ArrayList<>();
     }
 }
