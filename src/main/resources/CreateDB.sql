@@ -1,9 +1,8 @@
-DROP DATABASE IF EXISTS archer_java;
+DROP DATABASE IF EXISTS archer_test_java;
 
-CREATE DATABASE archer_java WITH
-OWNER = postgres
+CREATE DATABASE archer_test_java
+WITH OWNER = archer
 ENCODING = 'UTF8'
-TABLESPACE = pg_default
-LC_COLLATE = 'English_United States.1252'
-LC_CTYPE = 'English_United States.1252'
+LC_COLLATE = 'en_US.UTF-8'
+LC_CTYPE = 'en_US.UTF-8'
 CONNECTION LIMIT = -1;

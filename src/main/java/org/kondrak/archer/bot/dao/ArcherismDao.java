@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.result.StringResult;
@@ -14,11 +15,10 @@ import java.util.List;
 /**
  * Created by Administrator on 2/24/2017.
  */
-public class ArcherismDao {
-    private final PGConnectionPoolDataSource ds;
+public class ArcherismDao extends AbstractDao {
 
-    public ArcherismDao(PGConnectionPoolDataSource ds) {
-        this.ds = ds;
+    public ArcherismDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
+        super(ds, factory);
     }
 
     public List<Archerism> getArcherisms() {

@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS role_assignment CASCADE;
 DROP TABLE IF EXISTS message CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS archerisms CASCADE;
+DROP TABLE IF EXISTS rps_game CASCADE;
 
 --------------------- CREATE NEW STRUCTURES ---------------------
 -- IMPLEMENTED STRUCTURES:
@@ -133,6 +134,42 @@ CREATE TABLE archerisms (
   trigger_tx VARCHAR(16)  NOT NULL,
   msg_tx     VARCHAR(512) NOT NULL
 );
+
+-- START CREATE RPS STRUCTURES
+create table rps_game
+(
+  game_id bigserial not null
+    constraint rps_game_pkey
+    primary key,
+  winner varchar(32),
+  created timestamp not null
+)
+;
+
+create unique index rps_game_game_id_uindex
+  on rps_game (game_id)
+;
+
+create table rps_player
+(
+  player_id varchar(32) not null,
+  game_id bigint not null
+    constraint rps_player_pkey
+    primary key
+    constraint rps_player_rps_game_game_id_fk
+    references rps_game,
+  choice varchar(16) not null,
+  joined timestamp not null,
+  creator boolean not null
+);
+alter table rps_player
+  add constraint rps_player_rps_game_game_id_fk
+foreign key (game_id) references rps_game
+;
+
+-- END CREATE RPS STRUCTURES
+
+
 
 INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('help', '-----------------------------------------------------------------------------\n-- Available commands:\n-----------------------------------------------------------------------------\n-- * !archerism - display a random archer quote\n-- * !help - display help information on the commands you can use\n-----------------------------------------------------------------------------');
 INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('!archerism','Do you want ants!?!  Because THAT is how you get ants.');

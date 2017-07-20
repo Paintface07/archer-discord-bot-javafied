@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
@@ -17,12 +18,10 @@ import java.util.List;
 /**
  * Created by Administrator on 11/6/2016.
  */
-public class UserDao {
+public class UserDao extends AbstractDao {
 
-    private final PGConnectionPoolDataSource ds;
-
-    public UserDao(PGConnectionPoolDataSource ds) {
-        this.ds = ds;
+    public UserDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
+        super(ds, factory);
     }
 
     public List<User> getUsers() {

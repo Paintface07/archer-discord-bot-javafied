@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
@@ -12,11 +13,10 @@ import java.sql.SQLException;
 /**
  * Created by Administrator on 2/24/2017.
  */
-public class GuildDao {
-    private PGConnectionPoolDataSource ds;
+public class GuildDao extends AbstractDao {
 
-    public GuildDao(PGConnectionPoolDataSource ds) {
-        this.ds = ds;
+    public GuildDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
+        super(ds, factory);
     }
 
     public boolean guildIsSaved(IGuild guild) {

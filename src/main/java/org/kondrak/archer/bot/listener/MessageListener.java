@@ -22,7 +22,7 @@ public class MessageListener extends AbstractListener {
 
     public MessageListener(ArcherBotContext ctx) {
         super(ctx);
-        this.msgDao = new MessageDao(ctx.getDatasource());
+        this.msgDao = new MessageDao(ctx.getDatasource(), ctx.getFactory());
     }
 
     @EventSubscriber

@@ -1,29 +1,29 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.kondrak.archer.bot.dao.mappers.StatisticMapper;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.DateUtils;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
 import org.kondrak.archer.bot.dao.utils.parameter.StringParameter;
 import org.kondrak.archer.bot.dao.utils.parameter.TimestampParameter;
-import org.kondrak.archer.bot.dao.utils.result.LongResult;
-import org.kondrak.archer.bot.dao.utils.result.StringResult;
+import org.kondrak.archer.bot.model.Statistic;
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import sx.blah.discord.handle.obj.IMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by Administrator on 11/6/2016.
  */
-public class MessageDao {
-    private final PGConnectionPoolDataSource ds;
+public class MessageDao extends AbstractDao {
 
-    public MessageDao(PGConnectionPoolDataSource ds) {
-        this.ds = ds;
+    public MessageDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
+        super(ds, factory);
     }
 
     public void saveMessage(IMessage msg) {
@@ -49,42 +49,14 @@ public class MessageDao {
                 new BooleanParameter(msg.isPinned()));
     }
 
-    public Map<String, Long> getTimesSaidByUser(final String guild, final String word) {
-        String searchWord = "%" + QueryExecutor.sanitize(word.toUpperCase()) + "%";
-
-        // TODO: make the bot's "self" ID configurable, or dynamically populated
-        String like = "SELECT users.username, count(*) " +
-                "FROM message " +
-                "  JOIN users " +
-                "    ON message.author = users.user_id " +
-                "  JOIN channel " +
-                "    ON message.channel_id = channel.channel_id" +
-                "  JOIN guild " +
-                "    ON channel.parent = guild.guild_id " +
-                "WHERE UPPER(content) LIKE ? ESCAPE '!'" +
-                "AND content NOT LIKE '%!word%' " +
-                "AND author <> '239471420470591498'" +
-                "AND guild.guild_id = ?" +
-                "group by users.username";
-
-        ResultSet resultSet = QueryExecutor.execute(ds, DBOperation.QUERY, like,
-                new StringParameter(searchWord),
-                new StringParameter(guild));
-
-        Map<String, Long> result = new HashMap<>();
+    public List<Statistic> getTimesSaidByUser(final String guild, final String word) {
+        SqlSession session = factory.openSession();
         try {
-            while(resultSet.next()) {
-                String username = new StringResult(resultSet, 1).get();
-                Long count = new LongResult(resultSet, 2).get();
-                result.put(username, count);
-            }
-
-            return result;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            return session.getMapper(StatisticMapper.class)
+                    .getMessageCountsForGuildByUser(guild, word);
+        } finally {
+            session.close();
         }
-
-        return new HashMap<>();
     }
 
     public boolean messageExists(final String messageId) {

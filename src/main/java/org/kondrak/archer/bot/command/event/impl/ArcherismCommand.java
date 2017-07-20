@@ -25,7 +25,7 @@ public class ArcherismCommand extends AbstractMessageCommand {
 
     public ArcherismCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
-        this.archerismDao = new ArcherismDao(ctx.getDatasource());
+        this.archerismDao = new ArcherismDao(ctx.getDatasource(), ctx.getFactory());
         this.sayings = archerismDao.getArcherisms();
     }
 

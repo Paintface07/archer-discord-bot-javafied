@@ -32,7 +32,7 @@ public class UserListener extends AbstractListener {
 
     public UserListener(ArcherBotContext ctx) {
         super(ctx);
-        this.userDao = new UserDao(ctx.getDatasource());
+        this.userDao = new UserDao(ctx.getDatasource(), ctx.getFactory());
     }
 
     @EventSubscriber

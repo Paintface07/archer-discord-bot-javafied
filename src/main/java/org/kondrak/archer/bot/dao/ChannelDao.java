@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dao;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.kondrak.archer.bot.dao.utils.DBOperation;
 import org.kondrak.archer.bot.dao.utils.QueryExecutor;
 import org.kondrak.archer.bot.dao.utils.parameter.BooleanParameter;
@@ -14,11 +15,10 @@ import java.sql.SQLException;
 /**
  * Created by Administrator on 2/24/2017.
  */
-public class ChannelDao {
-    private final PGConnectionPoolDataSource ds;
+public class ChannelDao extends AbstractDao {
 
-    public ChannelDao(PGConnectionPoolDataSource ds) {
-        this.ds = ds;
+    public ChannelDao(PGConnectionPoolDataSource ds, SqlSessionFactory factory) {
+        super(ds, factory);
     }
 
     public boolean channelIsSaved(IChannel channel) {

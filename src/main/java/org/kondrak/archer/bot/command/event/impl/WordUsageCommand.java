@@ -3,12 +3,13 @@ package org.kondrak.archer.bot.command.event.impl;
 import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.MessageDao;
+import org.kondrak.archer.bot.model.Statistic;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by Administrator on 2/25/2017.
@@ -19,22 +20,22 @@ public class WordUsageCommand extends AbstractMessageCommand {
 
     public WordUsageCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
-        messageDao = new MessageDao(ctx.getDatasource());
+        messageDao = new MessageDao(ctx.getDatasource(), ctx.getFactory());
     }
 
     @Override
     public IMessage execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
-        Map<String, Long> values = messageDao.getTimesSaidByUser(input.getGuild().getID(), content);
+        List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getID(), content);
 
         String response = "The word/phrase '" + content + "' has been used a total of ";
         String table = "";
         Long total = Long.valueOf(0);
 
-        for(Map.Entry<String, Long> e : values.entrySet()) {
-            Long ct = e.getValue();
-            table += "- " + e.getKey() + ": " + ct + "\n";
+        for(Statistic s : values) {
+            Long ct = Long.valueOf(s.getValue());
+            table += "- " + s.getKey() + ": " + ct + "\n";
             total += ct;
         }
 
