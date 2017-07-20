@@ -42,8 +42,8 @@ public class ArcherBotContext {
 
     public ArcherBotContext(String[] args) {
         this.args = args;
-        this.ds = setupDataSource(args[1], args[2], args[3]);
-        this.factory = configureMybatis(args[1], args[2], args[3]);
+        this.ds = setupDataSource(args[1], args[2], args[3], args[5]);
+        this.factory = configureMybatis(args[1], args[2], args[3], args[5]);
         this.client = setupClient(args[0]);
         final String prefix = args[4];
 
@@ -62,25 +62,24 @@ public class ArcherBotContext {
         dispatcher.registerListener(new UserListener(this));
     }
 
-    private SqlSessionFactory configureMybatis(String server, String user, String password) {
+    private SqlSessionFactory configureMybatis(String server, String user, String password, String database) {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
-        dataSource.setDatabaseName("archer_java");
+        dataSource.setDatabaseName(database);
         dataSource.setUser(user);
         dataSource.setPassword(password);
         dataSource.setServerName(server);
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
         Environment environment = new Environment("development", transactionFactory, dataSource);
         Configuration configuration = new Configuration(environment);
-//        configuration.addMapper(MessageMapper.class);
         configuration.addMappers("org.kondrak.archer.bot.dao.mappers");
         SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(configuration);
         return factory;
     }
 
-    private static PGConnectionPoolDataSource setupDataSource(String server, String user, String password) {
+    private static PGConnectionPoolDataSource setupDataSource(String server, String user, String password, String database) {
         PGConnectionPoolDataSource datasource = new PGConnectionPoolDataSource();
         datasource.setServerName(server);
-        datasource.setDatabaseName("archer_java");
+        datasource.setDatabaseName(database);
         datasource.setUser(user);
         datasource.setPassword(password);
         return datasource;
