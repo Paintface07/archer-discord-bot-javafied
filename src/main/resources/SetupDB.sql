@@ -7,6 +7,9 @@ DROP TABLE IF EXISTS message CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS archerisms CASCADE;
 DROP TABLE IF EXISTS rps_game CASCADE;
+DROP TABLE IF EXISTS rps_player CASCADE;
+DROP TABLE IF EXISTS configuration CASCADE;
+DROP TABLE IF EXISTS configuration_assignment CASCADE;
 
 --------------------- CREATE NEW STRUCTURES ---------------------
 -- IMPLEMENTED STRUCTURES:
@@ -169,6 +172,43 @@ foreign key (game_id) references rps_game
 
 -- END CREATE RPS STRUCTURES
 
+-- START CREATE CONFIGURATION STRUCTURE
+
+create table configuration
+(
+  configuration_id bigserial not null
+    constraint configuration_pkey
+    primary key,
+  configuration_name varchar(32) not null,
+  configuration_data_type varchar(32) not null,
+  configuration_value varchar(32) not null
+)
+;
+
+create unique index configuration_configuration_id_uindex
+  on configuration (configuration_id)
+;
+
+create table configuration_assignment
+(
+  assignment_id bigserial not null
+    constraint configuration_assignment_pkey
+    primary key,
+  configuration_id bigint not null
+    constraint configuration_assignment_configuration_configuration_id_fk
+    references configuration,
+  configuration_scope varchar(32) not null,
+  configuration_fkey varchar(32) not null
+)
+;
+
+create unique index configuration_assignment_assignment_id_uindex
+  on configuration_assignment (assignment_id)
+;
+
+
+
+-- END CREATE CONFIGURATION STRUCTURE
 
 
 INSERT INTO archerisms (trigger_tx, msg_tx) VALUES ('help', '-----------------------------------------------------------------------------\n-- Available commands:\n-----------------------------------------------------------------------------\n-- * !archerism - display a random archer quote\n-- * !help - display help information on the commands you can use\n-----------------------------------------------------------------------------');
