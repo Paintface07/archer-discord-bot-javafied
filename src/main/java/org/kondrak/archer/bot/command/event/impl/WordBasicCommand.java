@@ -4,6 +4,8 @@ import org.kondrak.archer.bot.command.event.AbstractMessageCommand;
 import org.kondrak.archer.bot.context.ArcherBotContext;
 import org.kondrak.archer.bot.dao.MessageDao;
 import org.kondrak.archer.bot.model.Statistic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -15,6 +17,8 @@ import java.util.List;
  * Created by Administrator on 2/25/2017.
  */
 public class WordBasicCommand extends AbstractMessageCommand {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WordBasicCommand.class);
 
     private MessageDao messageDao;
 
@@ -44,7 +48,7 @@ public class WordBasicCommand extends AbstractMessageCommand {
         try {
             input.reply(response);
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-            e.printStackTrace();
+            LOG.error("Could not execute WordBasicCommand: ", e);
         }
     }
 

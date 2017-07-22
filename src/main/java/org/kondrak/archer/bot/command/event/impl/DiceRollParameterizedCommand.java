@@ -37,7 +37,7 @@ public class DiceRollParameterizedCommand extends AbstractMessageCommand {
         try {
             input.reply("You rolled: " + total);
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-            e.printStackTrace();
+            LOG.error("Could not respond to DiceRollParameterizedCommand: ", e);
         }
     }
 

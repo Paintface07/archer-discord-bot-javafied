@@ -44,7 +44,7 @@ public class TimerParameterizedCommand extends AbstractMessageCommand {
                     try {
                         input.reply(Emote.ALARM_CLOCK + " Time for" + message + "!");
                     } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-                        e.printStackTrace();
+                        LOG.error("Could not execute TimerParameterizedCommand: ", e);
                     }
                 }
             }, wait);

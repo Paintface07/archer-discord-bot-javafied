@@ -45,7 +45,7 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
             try {
                 msg.load(100);
             } catch (RateLimitException e) {
-                e.printStackTrace();
+                LOG.error("Could not reload initial buffer in LoadMessagesBasicAdminCommand: ", e);
             }
 
             ListIterator<IMessage>iter =  msg.listIterator();
@@ -66,7 +66,7 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
                             LOG.info("=== Refreshing buffer @ {} ===", msgCount);
                             msg.load(100);
                         } catch (RateLimitException e) {
-                            e.printStackTrace();
+                            LOG.error("Could not reload subsequent buffer in LoadMessagesBasicAdminCommand: ", e);
                         }
                     }
                 }
