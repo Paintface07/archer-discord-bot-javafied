@@ -18,19 +18,19 @@ import java.util.ListIterator;
 /**
  * Created by Administrator on 2/25/2017.
  */
-public class LoadExistingMessagesCommand extends AbstractMessageCommand {
+public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LoadExistingMessagesCommand.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoadMessagesBasicAdminCommand.class);
 
     private MessageDao messageDao;
 
-    public LoadExistingMessagesCommand(ArcherBotContext ctx, String command) {
+    public LoadMessagesBasicAdminCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
         messageDao = new MessageDao(ctx.getFactory());
     }
 
     @Override
-    public IMessage execute(IMessage input) {
+    public void execute(IMessage input) {
         List<IChannel> channels = input.getClient().getChannels();
 
         int channelCount = 0;
@@ -79,16 +79,17 @@ public class LoadExistingMessagesCommand extends AbstractMessageCommand {
             LOG.error("Could not reply to message: {}", input.getChannel().getName());
             ex.printStackTrace();
         }
-        return null;
     }
 
     @Override
     public boolean shouldExecute(IMessage msg) {
-        if(null != msg.getContent() && msg.getContent().contains(getCommand())
+        return null != msg.getContent() && msg.getContent().startsWith(getCommand())
                 && msg.getAuthor().getName().equals("Paintface07")
-                && msg.getAuthor().getDiscriminator().equals("2733")) {
-            return true;
-        }
-        return false;
+                && msg.getAuthor().getDiscriminator().equals("2733");
+    }
+
+    @Override
+    public String getFormatErrorMessage(IMessage input) {
+        throw new UnsupportedOperationException("getFormatErrorMessage() is not implemented for " + this.getClass().getName());
     }
 }

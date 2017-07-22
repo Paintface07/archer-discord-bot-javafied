@@ -2,6 +2,8 @@ package org.kondrak.archer.bot.command.event;
 
 import org.kondrak.archer.bot.command.CommandRegistry;
 import org.kondrak.archer.bot.context.ArcherBotContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
@@ -12,6 +14,9 @@ import sx.blah.discord.util.RateLimitException;
  * Created by Administrator on 11/5/2016.
  */
 public abstract class AbstractMessageCommand implements MessageEventCommand<IMessage> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMessageCommand.class);
+
     private final ArcherBotContext ctx;
     private final String command;
 
@@ -21,39 +26,24 @@ public abstract class AbstractMessageCommand implements MessageEventCommand<IMes
     }
 
     @Override
-    public boolean shouldExecute(IMessage input) {
-        // default to making sure the content contains the command
-        return null != input.getContent() && input.getContent().contains(command);
-    }
+    public abstract void execute(IMessage msg);
 
     @Override
-    public void beforeExecute(IMessage input, IMessage output) {
-        // default to doing nothing
-    }
+    public abstract boolean shouldExecute(IMessage input);
 
-    @Override
-    public void afterExecute(IMessage input, IMessage output) {
-        // default to doing nothing
-    }
-
-    @Override
-    public String getFormatErrorMessage(IMessage input) {
-        // default to throwing an exception for implementations that do not implement their own error messages
-        throw new UnsupportedOperationException("An error message is not implemented for " + getClass().getName() + ".");
-    }
-
-    @Override
-    public String getFormatRegex() {
-        // default to throwing an exception for implementations that do not have checks for parameter formatting
-        throw new UnsupportedOperationException("A formatting regex is not implemented for " + getClass().getName() + ".");
-    }
+    /**
+     * Implement this method to write formatted error messages when getFormatErrorMessage() is called.
+     * @param input - the message that errored
+     * @return {@code String} - the error message to reply with
+     */
+    public abstract String getFormatErrorMessage(IMessage input);
 
     @Override
     public void handleFailure(IMessage input) {
         try {
             input.reply(getFormatErrorMessage(input));
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-            e.printStackTrace();
+            LOG.error("Error responding with failure: ", e);
         }
     }
 
@@ -65,7 +55,7 @@ public abstract class AbstractMessageCommand implements MessageEventCommand<IMes
         return ctx.getRegistry();
     }
 
-    public IDiscordClient getClient() {
+    protected IDiscordClient getClient() {
         return ctx.getClient();
     }
 }

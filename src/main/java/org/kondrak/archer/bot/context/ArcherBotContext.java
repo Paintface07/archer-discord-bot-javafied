@@ -7,12 +7,13 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.kondrak.archer.bot.command.CommandRegistry;
-import org.kondrak.archer.bot.command.event.impl.ArcherismCommand;
-import org.kondrak.archer.bot.command.event.impl.DiceRollCommand;
-import org.kondrak.archer.bot.command.event.impl.HelpCommand;
-import org.kondrak.archer.bot.command.event.impl.LoadExistingMessagesCommand;
-import org.kondrak.archer.bot.command.event.impl.TimerCommand;
-import org.kondrak.archer.bot.command.event.impl.WordUsageCommand;
+import org.kondrak.archer.bot.command.event.impl.ArcherismBasicCommand;
+import org.kondrak.archer.bot.command.event.impl.ConfigurationParameterizedCommand;
+import org.kondrak.archer.bot.command.event.impl.DiceRollParameterizedCommand;
+import org.kondrak.archer.bot.command.event.impl.HelpBasicCommand;
+import org.kondrak.archer.bot.command.event.impl.LoadMessagesBasicAdminCommand;
+import org.kondrak.archer.bot.command.event.impl.TimerParameterizedCommand;
+import org.kondrak.archer.bot.command.event.impl.WordBasicCommand;
 import org.kondrak.archer.bot.listener.MessageListener;
 import org.kondrak.archer.bot.listener.ReadyListener;
 import org.kondrak.archer.bot.listener.UserListener;
@@ -38,22 +39,25 @@ public class ArcherBotContext {
     private final IDiscordClient client;
     private final CommandRegistry registry;
     private final EventDispatcher dispatcher;
+    private final String prefix;
 
     public ArcherBotContext(String[] args) {
         this.args = args;
         this.ds = setupDataSource(args[1], args[2], args[3], args[5]);
         this.factory = configureMybatis(args[1], args[2], args[3], args[5]);
         this.client = setupClient(args[0]);
-        final String prefix = args[4];
+//        final String prefix = args[4];
+        this.prefix = args[4];
 
         this.registry = new CommandRegistry(client);
         registry.registerAll(
-                new ArcherismCommand(this, prefix + "archerism"),
-                new HelpCommand(this, prefix + "help"),
-                new LoadExistingMessagesCommand(this, prefix + "admin load"),
-                new WordUsageCommand(this, prefix + "word"),
-                new TimerCommand(this, prefix + "timer"),
-                new DiceRollCommand(this, prefix + "roll"));
+                new ArcherismBasicCommand(this, prefix + "archerism"),
+                new HelpBasicCommand(this, prefix + "help"),
+                new LoadMessagesBasicAdminCommand(this, prefix + "admin load"),
+                new WordBasicCommand(this, prefix + "word"),
+                new TimerParameterizedCommand(this, prefix + "timer"),
+                new DiceRollParameterizedCommand(this, prefix + "roll"),
+                new ConfigurationParameterizedCommand(this, prefix + "config"));
 
         this.dispatcher = client.getDispatcher();
         dispatcher.registerListener(new MessageListener(this));
@@ -127,5 +131,9 @@ public class ArcherBotContext {
 
     public SqlSessionFactory getFactory() {
         return factory;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }

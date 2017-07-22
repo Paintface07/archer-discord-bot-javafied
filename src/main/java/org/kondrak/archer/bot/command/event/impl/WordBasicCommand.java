@@ -14,24 +14,24 @@ import java.util.List;
 /**
  * Created by Administrator on 2/25/2017.
  */
-public class WordUsageCommand extends AbstractMessageCommand {
+public class WordBasicCommand extends AbstractMessageCommand {
 
     private MessageDao messageDao;
 
-    public WordUsageCommand(ArcherBotContext ctx, String command) {
+    public WordBasicCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
         messageDao = new MessageDao(ctx.getFactory());
     }
 
     @Override
-    public IMessage execute(IMessage input) {
+    public void execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
         List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getStringID(), content);
 
         String response = "The word/phrase '" + content + "' has been used a total of ";
         String table = "";
-        Long total = Long.valueOf(0);
+        Long total = 0L;
 
         for(Statistic s : values) {
             Long ct = Long.valueOf(s.getValue());
@@ -46,6 +46,15 @@ public class WordUsageCommand extends AbstractMessageCommand {
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
             e.printStackTrace();
         }
-        return null;
+    }
+
+    @Override
+    public boolean shouldExecute(IMessage input) {
+        return null != input.getContent() && input.getContent().startsWith(getCommand());
+    }
+
+    @Override
+    public String getFormatErrorMessage(IMessage input) {
+        throw new UnsupportedOperationException("getFormatErrorMessage() is not implemented for " + this.getClass().getName());
     }
 }
