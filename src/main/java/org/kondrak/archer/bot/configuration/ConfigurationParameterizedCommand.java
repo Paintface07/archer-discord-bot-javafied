@@ -38,7 +38,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                     }
                     input.reply(reply.toString());
                 } else {
-                    input.reply(String.format("Nothing is configured for: {}, {}, {}", ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), ConfigDatatype.valueOf(p[2])));
+                    input.reply(String.format("Nothing is configured for: %s, %s, %s", ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), ConfigDatatype.valueOf(p[2])));
                 }
             } else {
                 handleFormatError(input);
