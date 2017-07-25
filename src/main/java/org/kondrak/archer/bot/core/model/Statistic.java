@@ -1,4 +1,4 @@
-package org.kondrak.archer.bot.word;
+package org.kondrak.archer.bot.core.model;
 
 public class Statistic {
     private String key;

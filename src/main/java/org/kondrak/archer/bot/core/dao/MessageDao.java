@@ -4,7 +4,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.kondrak.archer.bot.core.mappers.MessageMapper;
-import org.kondrak.archer.bot.word.Statistic;
+import org.kondrak.archer.bot.core.model.Statistic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;

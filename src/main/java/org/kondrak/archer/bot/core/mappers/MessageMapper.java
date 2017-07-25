@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
-import org.kondrak.archer.bot.word.Statistic;
+import org.kondrak.archer.bot.core.model.Statistic;
 
 import java.time.LocalDateTime;
 import java.util.List;
