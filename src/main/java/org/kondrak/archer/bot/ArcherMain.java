@@ -1,6 +1,6 @@
 package org.kondrak.archer.bot;
 
-import org.kondrak.archer.bot.context.ArcherBotContext;
+import org.kondrak.archer.bot.core.ArcherBotContext;
 
 /**
  * Created by Administrator on 11/3/2016.
