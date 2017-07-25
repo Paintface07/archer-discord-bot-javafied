@@ -31,25 +31,24 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         } else if(content.startsWith(ConfigCommand.SHOW + " ")) {
             String[] p = content.replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
             if(p.length == 2) {
-                ConfigScope type = ConfigScope.valueOf(p[1]);
-                switch (type) {
-                    case GUILD: {
-                        List<Configuration> config = configDao.getConfigurationByNameScopeAndType(ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), input.getGuild().getStringID());
-                        StringBuilder reply = new StringBuilder("\n");
-                        for (Configuration c : config) {
-                            reply.append("\t * ").append(c.toString()).append("\n");
+                ConfigScope type = ConfigScope.valueOf(p[0]);
+                if(p[1] != null) {
+                    switch (type) {
+                        case GUILD: {
+                            handleCommand(ConfigType.valueOf(p[1]), type, input, "guild");
+                            break;
+                        } case CHANNEL: {
+                            handleCommand(ConfigType.valueOf(p[1]), type, input, "channel");
+                            break;
+                        } case USER: {
+                            handleCommand(ConfigType.valueOf(p[1]), type, input, "user");
+                            break;
+                        } default: {
+                            handleFormatError(input);
                         }
-                        input.reply(reply.toString());
-                        break;
-                    } case CHANNEL:{
-                        input.reply("Channel configuration queries are not yet supported.");
-                        break;
-                    } case USER:{
-                        input.reply("User configuration queries are not yet supported.");
-                        break;
-                    } default: {
-                        handleFormatError(input);
                     }
+                } else {
+                    handleFormatError(input);
                 }
             } else {
                 handleFormatError(input);
@@ -79,5 +78,19 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
     @Override
     public String getFormatErrorMessage(IMessage input) {
         return "Your configuration command was malformed, or you do not have permission to execute it.";
+    }
+
+    private void handleCommand(ConfigType parameter, ConfigScope scope, IMessage input, String msg) {
+        List<Configuration> config = configDao.getConfigurationByNameScopeAndType(parameter,
+                scope, input.getGuild().getStringID());
+        if(null != config && !config.isEmpty()) {
+            StringBuilder reply = new StringBuilder("\n");
+            for (Configuration c : config) {
+                reply.append("\t * ").append(c.toString()).append("\n");
+            }
+            input.reply(reply.toString());
+        } else {
+            input.reply("No "+ msg + " configurations are setup.");
+        }
     }
 }
