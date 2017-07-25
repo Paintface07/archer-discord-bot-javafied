@@ -24,8 +24,10 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
         if(content.startsWith(ConfigCommand.ADD + " ")) {
+            input.reply("Adding configurations are not yet supported.");
             throw new UnsupportedOperationException("Adding configurations are not yet supported.");
         } else if(content.startsWith(ConfigCommand.REMOVE + " ")) {
+            input.reply("Removing configurations are not yet supported.");
             throw new UnsupportedOperationException("Removing configurations are not yet supported.");
         } else if(content.startsWith(ConfigCommand.SHOW + " ")) {
             String[] p = content.replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
