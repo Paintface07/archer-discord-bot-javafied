@@ -22,7 +22,7 @@ public interface ConfigMapper {
             "ON configuration_assignment.configuration_id = configuration.configuration_id",
             "WHERE configuration.configuration_name = #{type}",
             "AND configuration_assignment.configuration_scope = #{scope}",
-            "AND configuration.configuration_data_type = #{datatype}"
+            "AND configuration_assignment.configuration_fkey = #{fkey}"
     })
     @Results({
             @Result(column = "assignment_id", property = "assignmentId"),
@@ -34,5 +34,5 @@ public interface ConfigMapper {
             @Result(column = "configuration_value", property = "configValue")
     })
     List<Configuration> getConfigurationByNameScopeAndType(@Param("type") ConfigType type, @Param("scope") ConfigScope scope,
-            @Param("datatype") ConfigDatatype datatype);
+            @Param("fkey") String fkey);
 }

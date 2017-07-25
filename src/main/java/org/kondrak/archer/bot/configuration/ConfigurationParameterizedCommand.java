@@ -21,26 +21,35 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
     @Override
     public void execute(IMessage input) {
+        // TODO: abstract command parsing into its own class
         String content = input.getContent().replace(getCommand()+ " ", "");
 
         if(content.startsWith(ConfigCommand.ADD + " ")) {
             input.reply("Adding configurations are not yet supported.");
-            throw new UnsupportedOperationException("Adding configurations are not yet supported.");
         } else if(content.startsWith(ConfigCommand.REMOVE + " ")) {
             input.reply("Removing configurations are not yet supported.");
-            throw new UnsupportedOperationException("Removing configurations are not yet supported.");
         } else if(content.startsWith(ConfigCommand.SHOW + " ")) {
             String[] p = content.replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
-            if(p.length == 3) {
-                List<Configuration> config = configDao.getConfigurationByNameScopeAndType(ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), ConfigDatatype.valueOf(p[2]));
-                StringBuilder reply = new StringBuilder("");
-                if(null != config && config.size() > 0) {
-                    for (Configuration c : config) {
-                        reply.append(c.toString()).append("\n");
+            if(p.length == 2) {
+                ConfigScope type = ConfigScope.valueOf(p[1]);
+                switch (type) {
+                    case GUILD: {
+                        List<Configuration> config = configDao.getConfigurationByNameScopeAndType(ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), input.getGuild().getStringID());
+                        StringBuilder reply = new StringBuilder("\n");
+                        for (Configuration c : config) {
+                            reply.append("\t * ").append(c.toString()).append("\n");
+                        }
+                        input.reply(reply.toString());
+                        break;
+                    } case CHANNEL:{
+                        input.reply("Channel configuration queries are not yet supported.");
+                        break;
+                    } case USER:{
+                        input.reply("User configuration queries are not yet supported.");
+                        break;
+                    } default: {
+                        handleFormatError(input);
                     }
-                    input.reply(reply.toString());
-                } else {
-                    input.reply(String.format("Nothing is configured for: %s, %s, %s", ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), ConfigDatatype.valueOf(p[2])));
                 }
             } else {
                 handleFormatError(input);

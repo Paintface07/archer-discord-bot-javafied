@@ -18,10 +18,10 @@ public class ConfigDao extends AbstractDao {
         super(factory);
     }
 
-    public List<Configuration> getConfigurationByNameScopeAndType(ConfigType type, ConfigScope scope, ConfigDatatype datatype) {
+    public List<Configuration> getConfigurationByNameScopeAndType(ConfigType type, ConfigScope scope, String fkey) {
         SqlSession session = factory.openSession();
         try {
-            List<Configuration> stats = session.getMapper(ConfigMapper.class).getConfigurationByNameScopeAndType(type, scope, datatype);
+            List<Configuration> stats = session.getMapper(ConfigMapper.class).getConfigurationByNameScopeAndType(type, scope, fkey);
             session.close();
             return stats;
         } catch(PersistenceException e) {
