@@ -31,7 +31,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             String[] p = content.replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
             if(p.length == 3) {
                 List<Configuration> config = configDao.getConfigurationByNameScopeAndType(ConfigType.valueOf(p[0]), ConfigScope.valueOf(p[1]), ConfigDatatype.valueOf(p[2]));
-                StringBuffer reply = new StringBuffer("");
+                StringBuilder reply = new StringBuilder("");
                 if(null != config && config.size() > 0) {
                     for (Configuration c : config) {
                         reply.append(c.toString()).append("\n");
