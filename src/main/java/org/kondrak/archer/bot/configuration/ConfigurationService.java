@@ -15,6 +15,7 @@ public class ConfigurationService {
     }
 
     // TODO: make the configuration check an abstraction so it is executed by every command
+    // TODO: fix always passing.  Need to add guild ID to query.
     public boolean isConfiguredForGuild(IGuild guild, IUser user, ConfigType type){
         List<Configuration> configs = configDao.getConfigurationByNameScopeAndType(ConfigType.ARCHERISM_COMMAND,
                 ConfigScope.GUILD, guild.getStringID());
