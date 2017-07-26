@@ -1,5 +1,7 @@
 package org.kondrak.archer.bot.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
@@ -9,7 +11,10 @@ import sx.blah.discord.util.RateLimitException;
 /**
  * Created by Administrator on 11/5/2016.
  */
-public abstract class AbstractMessageCommand implements MessageEventCommand<IMessage> {
+public abstract class AbstractMessageCommand implements MessageEventCommand {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMessageCommand.class);
+
     private final ArcherBotContext ctx;
     private final String command;
 
@@ -38,7 +43,7 @@ public abstract class AbstractMessageCommand implements MessageEventCommand<IMes
         try {
             input.reply(getFormatErrorMessage(input));
         } catch (MissingPermissionsException | RateLimitException | DiscordException e) {
-            e.printStackTrace();
+            LOG.error("Error sending format error: ", e);
         }
     }
 

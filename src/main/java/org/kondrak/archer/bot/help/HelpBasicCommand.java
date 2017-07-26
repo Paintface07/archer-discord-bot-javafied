@@ -17,6 +17,8 @@ public class HelpBasicCommand extends AbstractMessageCommand {
 
     private static final Logger LOG = LoggerFactory.getLogger(HelpBasicCommand.class);
 
+    private static final String LINE_PREFIX = "== **";
+
     private final String helpText;
 
     public HelpBasicCommand(ArcherBotContext ctx, String command) {
@@ -26,11 +28,11 @@ public class HelpBasicCommand extends AbstractMessageCommand {
                 "==============================================================================\n" +
                 "== **Available Commands:**\n" +
                 "==============================================================================\n" +
-                "== **" + prefix + "archerism** - display a random archer quote\n" +
-                "== **" + prefix + "help** - display help information on the commands you can use\n" +
-                "== **" + prefix + "word <word/phrase>** - display the number of word usages by user\n" +
-                "== **" + prefix + "timer <ms up to 13 characters> <name>** - start a timer\n"+
-                "== **" + prefix + "roll <number up to 3 characters>d<sides up to 3 characters>** - roll one or more dice" +
+                LINE_PREFIX + prefix + "archerism** - display a random archer quote\n" +
+                LINE_PREFIX + prefix + "help** - display help information on the commands you can use\n" +
+                LINE_PREFIX + prefix + "word <word/phrase>** - display the number of word usages by user\n" +
+                LINE_PREFIX + prefix + "timer <ms up to 13 characters> <name>** - start a timer\n"+
+                LINE_PREFIX + prefix + "roll <number up to 3 characters>d<sides up to 3 characters>** - roll one or more dice" +
                 "==============================================================================";
     }
 

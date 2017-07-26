@@ -48,29 +48,7 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
                 LOG.error("Could not reload initial buffer in LoadMessagesBasicAdminCommand: ", e);
             }
 
-            ListIterator<IMessage> iter =  msg.listIterator();
-            IMessage m = iter.next();
-            if(m != null) {
-                while (iter.hasNext()) {
-                    boolean alreadyExists = messageDao.messageExists(m.getStringID());
-
-                    if(!alreadyExists) {
-                        LOG.info("Loading message: {}", m.getContent());
-                        messageDao.saveMessage(m);
-                        msgCount++;
-                    }
-
-                    m = iter.next();
-                    if (msgCount % 50 == 0) {
-                        try {
-                            LOG.info("=== Refreshing buffer @ {} ===", msgCount);
-                            msg.load(100);
-                        } catch (RateLimitException e) {
-                            LOG.error("Could not reload subsequent buffer in LoadMessagesBasicAdminCommand: ", e);
-                        }
-                    }
-                }
-            }
+            loadBatch(msg, msgCount);
         }
 
         try {
@@ -91,5 +69,31 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
     @Override
     public String getFormatErrorMessage(IMessage input) {
         throw new UnsupportedOperationException("getFormatErrorMessage() is not implemented for " + this.getClass().getName());
+    }
+
+    private void loadBatch(MessageList msg, int msgCount) {
+        ListIterator<IMessage> iter =  msg.listIterator();
+        IMessage m = iter.next();
+        if(m != null) {
+            while (iter.hasNext()) {
+                boolean alreadyExists = messageDao.messageExists(m.getStringID());
+
+                if(!alreadyExists) {
+                    LOG.info("Loading message: {}", m.getContent());
+                    messageDao.saveMessage(m);
+                    msgCount++;
+                }
+
+                m = iter.next();
+                if (msgCount % 50 == 0) {
+                    try {
+                        LOG.info("=== Refreshing buffer @ {} ===", msgCount);
+                        msg.load(100);
+                    } catch (RateLimitException e) {
+                        LOG.error("Could not reload subsequent buffer in LoadMessagesBasicAdminCommand: ", e);
+                    }
+                }
+            }
+        }
     }
 }

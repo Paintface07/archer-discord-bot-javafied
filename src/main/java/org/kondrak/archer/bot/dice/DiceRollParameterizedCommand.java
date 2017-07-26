@@ -9,6 +9,8 @@ import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
+import java.util.Random;
+
 /**
  * Created by nosferatu on 7/11/17.
  */
@@ -26,12 +28,13 @@ public class DiceRollParameterizedCommand extends AbstractMessageCommand {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
         String[] parts = content.replace(" ", "").split("d");
-        int number = Integer.valueOf(parts[0]);
-        int sides = Integer.valueOf(parts[1]);
+        int number = Integer.parseInt(parts[0]);
+        int sides = Integer.parseInt(parts[1]);
         int total = 0;
 
+        Random r = new Random();
         for(int n = 0; n < number; n++) {
-            total += (int) (Math.random() * sides) + 1;
+            total += r.nextInt(sides) + 1;
         }
 
         try {

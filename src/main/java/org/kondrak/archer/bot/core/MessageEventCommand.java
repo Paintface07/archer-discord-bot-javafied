@@ -5,7 +5,7 @@ import sx.blah.discord.handle.obj.IMessage;
 /**
  * Created by Administrator on 11/5/2016.
  */
-public interface MessageEventCommand<T> extends BotCommand<IMessage> {
+public interface MessageEventCommand extends BotCommand<IMessage> {
     @Override
     boolean shouldExecute(IMessage input);
 

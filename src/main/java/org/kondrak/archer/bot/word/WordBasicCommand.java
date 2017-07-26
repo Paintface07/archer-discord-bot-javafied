@@ -34,16 +34,16 @@ public class WordBasicCommand extends AbstractMessageCommand {
         List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getStringID(), content);
 
         String response = "The word/phrase '" + content + "' has been used a total of ";
-        String table = "";
+        StringBuilder table = new StringBuilder("");
         Long total = 0L;
 
         for(Statistic s : values) {
             Long ct = Long.valueOf(s.getValue());
-            table += "- " + s.getKey() + ": " + ct + "\n";
+            table.append("- " + s.getKey() + ": " + ct + "\n");
             total += ct;
         }
 
-        response += total + " times by:\n" + table;
+        response += total + " times by:\n" + table.toString();
 
         try {
             input.reply(response);

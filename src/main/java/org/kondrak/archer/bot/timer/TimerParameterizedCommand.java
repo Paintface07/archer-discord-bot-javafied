@@ -35,7 +35,7 @@ public class TimerParameterizedCommand extends AbstractMessageCommand {
 
         if(parts.length >= 2) {
             List<String> partsArray = Arrays.stream(parts).collect(Collectors.toList());
-            long wait = Long.valueOf(partsArray.get(0));
+            long wait = Long.parseLong(partsArray.get(0));
             partsArray.remove(0);
             String message = partsArray.stream().reduce("", (a, p) -> a += " " + p);
             new Timer().schedule(new TimerTask() {

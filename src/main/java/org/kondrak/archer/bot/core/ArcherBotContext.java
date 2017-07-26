@@ -32,6 +32,8 @@ public class ArcherBotContext {
 
     public static final Logger LOG = LoggerFactory.getLogger(ArcherBotContext.class);
 
+    public static final String EVENT_LOGGER_FORMAT = "Event triggered: {}";
+
     private final String[] args;
     private final PGConnectionPoolDataSource ds;
     private final SqlSessionFactory factory;
@@ -73,8 +75,7 @@ public class ArcherBotContext {
         Environment environment = new Environment("development", transactionFactory, dataSource);
         Configuration configuration = new Configuration(environment);
         configuration.addMappers("org.kondrak.archer.bot");
-        SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(configuration);
-        return factory;
+        return new SqlSessionFactoryBuilder().build(configuration);
     }
 
     private static PGConnectionPoolDataSource setupDataSource(String server, String user, String password, String database) {
@@ -88,14 +89,14 @@ public class ArcherBotContext {
 
     private static IDiscordClient setupClient(String appKey) {
         try {
-            IDiscordClient client = buildClient(appKey, true);
-            return client;
+            return buildClient(appKey, true);
         } catch(DiscordException dx) {
-            throw new RuntimeException("Could not create discord client!");
+            LOG.error("Could not create discord client!");
+            return null;
         }
     }
 
-    private static IDiscordClient buildClient(String token, boolean login) throws DiscordException {
+    private static IDiscordClient buildClient(String token, boolean login) {
         ClientBuilder clientBuilder = new ClientBuilder();
         clientBuilder.withToken(token);
         LOG.info("Attempting login with: {}", token);

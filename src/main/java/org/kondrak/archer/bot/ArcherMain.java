@@ -8,6 +8,6 @@ import org.kondrak.archer.bot.core.ArcherBotContext;
 public class ArcherMain {
 
     public static void main(String[] args) {
-        ArcherBotContext ctx = new ArcherBotContext(args);
+        new ArcherBotContext(args);
     }
 }

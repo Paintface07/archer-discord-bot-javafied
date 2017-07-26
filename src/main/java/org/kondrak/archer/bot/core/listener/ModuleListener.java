@@ -12,7 +12,7 @@ import sx.blah.discord.handle.impl.events.module.ModuleEnabledEvent;
  */
 public class ModuleListener extends AbstractListener {
 
-    private final Logger LOG = LoggerFactory.getLogger(ModuleListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ModuleListener.class);
 
     public ModuleListener(ArcherBotContext ctx) {
         super(ctx);
@@ -20,11 +20,11 @@ public class ModuleListener extends AbstractListener {
 
     @EventSubscriber
     public void onRegister(ModuleEnabledEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onDeregister(ModuleDisabledEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 }

@@ -16,7 +16,7 @@ import sx.blah.discord.handle.impl.events.guild.voice.VoiceChannelUpdateEvent;
  */
 public class ChannelListener extends AbstractListener {
 
-    private final Logger LOG = LoggerFactory.getLogger(ChannelListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ChannelListener.class);
 
     public ChannelListener(ArcherBotContext ctx) {
         super(ctx);
@@ -24,31 +24,31 @@ public class ChannelListener extends AbstractListener {
 
     @EventSubscriber
     public void onCreate(ChannelCreateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onDelete(ChannelDeleteEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onUpdate(ChannelUpdateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceChannelCreate(VoiceChannelCreateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceChannelDelete(VoiceChannelDeleteEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceChannelUpdate(VoiceChannelUpdateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 }

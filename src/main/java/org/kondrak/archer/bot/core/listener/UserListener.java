@@ -5,7 +5,6 @@ import org.kondrak.archer.bot.core.dao.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.StatusChangeEvent;
 import sx.blah.discord.handle.impl.events.guild.member.NicknameChangedEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
 import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
@@ -27,7 +26,7 @@ import java.util.List;
  */
 public class UserListener extends AbstractListener {
 
-    private final Logger LOG = LoggerFactory.getLogger(UserListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserListener.class);
 
     private final UserDao userDao;
 
@@ -38,70 +37,67 @@ public class UserListener extends AbstractListener {
 
     @EventSubscriber
     public void onNickChange(NicknameChangedEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onPresenceChange(PresenceUpdateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onStatusChange(PresenceUpdateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onBan(UserBanEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onJoin(UserJoinEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
         List<IUser> clientUsers = getRegistry().getClient().getUsers();
-        clientUsers.forEach((user) -> {
-            System.out.println(user.getName());
-        });
-        if(!userDao.userIsSaved(e.getUser().getID())) {
-            System.out.println("Saved: " + e.getUser().getName());
+        clientUsers.forEach(user -> LOG.info(user.getName()));
+        if(!userDao.userIsSaved(e.getUser().getStringID())) {
+            LOG.info("Saved: " + e.getUser().getName());
             userDao.insertUser(e.getUser());
         }
     }
 
     @EventSubscriber
     public void onLeave(UserLeaveEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onPardon(UserPardonEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onRoleUpdate(UserRoleUpdateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onUpdate(UserUpdateEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceJoin(UserVoiceChannelJoinEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
     }
 
     @EventSubscriber
     public void onVoiceLeave(UserVoiceChannelLeaveEvent e) {
         // TODO: Add a command to configure this setting (and others)
-        LOG.info("Event triggered: {}", e.getClass().getName());
-        String channelName = e.getVoiceChannel().getName();
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
         for(IChannel c : e.getGuild().getChannels()) {
             String textChannelName = e.getVoiceChannel().getName().toLowerCase();
-            if(c.getName().toLowerCase().equals(textChannelName)) {
+            if(c.getName().equalsIgnoreCase(textChannelName)) {
                 c.sendMessage(e.getUser().getName() + " disconnected.");
             }
         }
@@ -109,7 +105,7 @@ public class UserListener extends AbstractListener {
 
     @EventSubscriber
     public void onVoiceMove(UserVoiceChannelMoveEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
 //        String channelName = e.getVoiceChannel().getName();
 //        LOG.info("{}, {}", e.getNewChannel().getName(), e.getOldChannel().getName());
 //        for(IChannel c : e.getGuild().getChannels()) {

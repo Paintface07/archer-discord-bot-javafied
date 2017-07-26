@@ -12,7 +12,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
     public static final Logger LOG = LoggerFactory.getLogger(ConfigurationParameterizedCommand.class);
 
-    public final ConfigDao configDao;
+    private final ConfigDao configDao;
 
     public ConfigurationParameterizedCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
@@ -34,18 +34,17 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                 ConfigScope type = ConfigScope.valueOf(p[0]);
                 if(p[1] != null) {
                     switch (type) {
-                        case GUILD: {
-                            handleCommand(ConfigType.valueOf(p[1]), type, input, "guild");
+                        case GUILD:
+                            handleCommand(ConfigType.valueOf(p[1]), type, input, ConfigScope.GUILD.toString().toLowerCase());
                             break;
-                        } case CHANNEL: {
-                            handleCommand(ConfigType.valueOf(p[1]), type, input, "channel");
+                        case CHANNEL:
+                            handleCommand(ConfigType.valueOf(p[1]), type, input, ConfigScope.CHANNEL.toString().toLowerCase());
                             break;
-                        } case USER: {
-                            handleCommand(ConfigType.valueOf(p[1]), type, input, "user");
+                        case USER:
+                            handleCommand(ConfigType.valueOf(p[1]), type, input, ConfigScope.USER.toString().toLowerCase());
                             break;
-                        } default: {
+                        default:
                             handleFormatError(input);
-                        }
                     }
                 } else {
                     handleFormatError(input);

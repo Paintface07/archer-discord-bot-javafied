@@ -10,6 +10,7 @@ import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Administrator on 11/5/2016.
@@ -27,7 +28,7 @@ public class ArcherismBasicCommand extends AbstractMessageCommand {
 
     @Override
     public void execute(IMessage input) {
-        int rand = (int) (Math.random() * sayings.size());
+        int rand = new Random().nextInt(sayings.size());
         Archerism randMessage = sayings.get(rand);
         try {
             input.reply(randMessage.getText());

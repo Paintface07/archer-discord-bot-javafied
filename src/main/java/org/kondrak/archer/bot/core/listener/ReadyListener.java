@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ReadyListener extends AbstractListener {
 
-    private final Logger LOG = LoggerFactory.getLogger(ReadyListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReadyListener.class);
 
     private final ChannelDao channelDao;
     private final GuildDao guildDao;
@@ -34,13 +34,13 @@ public class ReadyListener extends AbstractListener {
 
     @EventSubscriber
     public void onReady(ReadyEvent e) {
-        LOG.info("Event triggered: {}", e.getClass().getName());
+        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
         List<IUser> u = getClient().getUsers();
 
         for(int i = 0; i <u.size(); i++) {
-            boolean saved = userDao.userIsSaved(u.get(i).getID());
+            boolean saved = userDao.userIsSaved(u.get(i).getStringID());
             if(!saved) {
-                System.out.println("Saved!: " + u.get(i).getName());
+                LOG.info("Saved!: " + u.get(i).getName());
                 userDao.insertUser(u.get(i));
             }
         }
@@ -49,7 +49,7 @@ public class ReadyListener extends AbstractListener {
 
         for(IGuild g : guilds) {
             if(!guildDao.guildIsSaved(g)) {
-                System.out.println("Adding " + g.getName());
+                LOG.info("Adding " + g.getName());
                 guildDao.addGuild(g);
             }
         }
@@ -58,7 +58,7 @@ public class ReadyListener extends AbstractListener {
 
         for(IChannel c : channels) {
             if(!channelDao.channelIsSaved(c)) {
-                System.out.println("Adding " + c.getName());
+                LOG.info("Adding " + c.getName());
                 channelDao.addChannel(c);
             }
         }
