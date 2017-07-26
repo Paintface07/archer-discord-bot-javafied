@@ -12,6 +12,7 @@ import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Administrator on 2/25/2017.
@@ -31,7 +32,10 @@ public class WordBasicCommand extends AbstractMessageCommand {
     public void execute(IMessage input) {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
-        List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getStringID(), content);
+        List<Statistic> values = messageDao.getTimesSaidByUser(input.getGuild().getStringID(), content)
+                .stream()
+                .sorted((v1, v2) -> v2.getValue().compareTo(v1.getValue()))
+                .collect(Collectors.toList());
 
         String response = "The word/phrase '" + content + "' has been used a total of ";
         StringBuilder table = new StringBuilder("");

@@ -33,20 +33,19 @@ public class ArcherismBasicCommand extends AbstractMessageCommand {
 
     @Override
     public void execute(IMessage input) {
-        if(configService.isConfiguredForGuild(input.getGuild(), input.getAuthor(), ConfigType.ARCHERISM_COMMAND)) {
-            int rand = new Random().nextInt(sayings.size());
-            Archerism randMessage = sayings.get(rand);
-            try {
-                input.reply(randMessage.getText());
-            } catch (MissingPermissionsException | RateLimitException | DiscordException ex) {
-                LOG.error("Could not reply to archerism command: ", ex);
-            }
+        int rand = new Random().nextInt(sayings.size());
+        Archerism randMessage = sayings.get(rand);
+        try {
+            input.reply(randMessage.getText());
+        } catch (MissingPermissionsException | RateLimitException | DiscordException ex) {
+            LOG.error("Could not reply to archerism command: ", ex);
         }
     }
 
     @Override
     public boolean shouldExecute(IMessage input) {
-        return null != input.getContent() && input.getContent().startsWith(getCommand());
+        return null != input.getContent() && input.getContent().startsWith(getCommand())
+                && configService.isConfiguredForGuild(input.getGuild(), input.getAuthor(), ConfigType.ARCHERISM_COMMAND);
     }
 
     @Override

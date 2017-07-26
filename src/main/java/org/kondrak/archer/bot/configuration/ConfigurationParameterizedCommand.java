@@ -12,12 +12,10 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
     public static final Logger LOG = LoggerFactory.getLogger(ConfigurationParameterizedCommand.class);
 
-    private final ConfigDao configDao;
     private final String prefix;
 
     public ConfigurationParameterizedCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
-        this.configDao = new ConfigDao(ctx.getFactory());
         this.prefix = ctx.getPrefix();
     }
 
@@ -27,33 +25,18 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         String content = input.getContent().replace(getCommand()+ " ", "");
 
         if(content.startsWith(ConfigCommand.ADD + " ")) {
-            input.reply("Adding configurations are not yet supported.");
-        } else if(content.startsWith(ConfigCommand.REMOVE + " ")) {
-            input.reply("Removing configurations are not yet supported.");
-        } else if(content.startsWith(ConfigCommand.SHOW + " ")) {
-            String[] p = content.replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
-            if(p.length == 2) {
+//            input.reply("Adding configurations are not yet supported.");
+            String[] p = input.getContent().replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
+            if (p.length == 2) {
                 ConfigScope type = ConfigScope.valueOf(p[0]);
-                if(p[1] != null) {
-                    switch (type) {
-                        case GUILD:
-                            handleCommand(ConfigType.valueOf(p[1]), type, input, ConfigScope.GUILD.toString().toLowerCase());
-                            break;
-                        case CHANNEL:
-                            handleCommand(ConfigType.valueOf(p[1]), type, input, ConfigScope.CHANNEL.toString().toLowerCase());
-                            break;
-                        case USER:
-                            handleCommand(ConfigType.valueOf(p[1]), type, input, ConfigScope.USER.toString().toLowerCase());
-                            break;
-                        default:
-                            handleFormatError(input);
-                    }
-                } else {
-                    handleFormatError(input);
-                }
+                configService.addConfiguration(ConfigType.valueOf(p[1]), type, ConfigScope.GUILD.toString().toLowerCase());
             } else {
                 handleFormatError(input);
             }
+        } else if(content.startsWith(ConfigCommand.REMOVE + " ")) {
+            input.reply("Removing configurations are not yet supported.");
+        } else if(content.startsWith(ConfigCommand.SHOW + " ")) {
+            showCommand(input);
         } else {
             handleFormatError(input);
         }
@@ -90,8 +73,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                 ") (" + ConfigScope.pipeDelimited() + ") (" + ConfigType.pipeDelimited() + ")";
     }
 
-    private void handleCommand(ConfigType parameter, ConfigScope scope, IMessage input, String msg) {
-        List<Configuration> config = configDao.getConfigurationByNameScopeAndType(parameter,
+    private void showCommand(ConfigType parameter, ConfigScope scope, IMessage input, String msg) {
+        List<Configuration> config = configService.getConfigurationByNameScopeAndType(parameter,
                 scope, input.getGuild().getStringID());
         if(null != config && !config.isEmpty()) {
             StringBuilder reply = new StringBuilder("\n");
@@ -105,6 +88,32 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             input.reply(reply.toString());
         } else {
             input.reply("No "+ msg + " configurations are setup.");
+        }
+    }
+
+    private void showCommand(IMessage msg) {
+        String[] p = msg.getContent().replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
+        if(p.length == 2) {
+            ConfigScope type = ConfigScope.valueOf(p[0]);
+            if(p[1] != null) {
+                switch (type) {
+                    case GUILD:
+                        showCommand(ConfigType.valueOf(p[1]), type, msg, ConfigScope.GUILD.toString().toLowerCase());
+                        break;
+                    case CHANNEL:
+                        showCommand(ConfigType.valueOf(p[1]), type, msg, ConfigScope.CHANNEL.toString().toLowerCase());
+                        break;
+                    case USER:
+                        showCommand(ConfigType.valueOf(p[1]), type, msg, ConfigScope.USER.toString().toLowerCase());
+                        break;
+                    default:
+                        handleFormatError(msg);
+                }
+            } else {
+                handleFormatError(msg);
+            }
+        } else {
+            handleFormatError(msg);
         }
     }
 }

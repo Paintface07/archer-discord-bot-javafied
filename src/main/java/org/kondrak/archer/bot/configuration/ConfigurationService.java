@@ -29,4 +29,12 @@ public class ConfigurationService {
         }
         return false;
     }
+
+    public List<Configuration> getConfigurationByNameScopeAndType(ConfigType type, ConfigScope scope, String fkey) {
+        return configDao.getConfigurationByNameScopeAndType(type, scope, fkey);
+    }
+
+    public void addConfiguration(ConfigType parameter, ConfigScope scope, String msg) {
+        configDao.addConfiguration(parameter, scope, msg);
+    }
 }

@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.configuration;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -35,4 +36,7 @@ public interface ConfigMapper {
     })
     List<Configuration> getConfigurationByNameScopeAndType(@Param("type") ConfigType type, @Param("scope") ConfigScope scope,
             @Param("fkey") String fkey);
+
+    @Insert({"INSERT INTO () VALUES ()"})
+    void addConfiguration(@Param("parameter") ConfigType parameter, @Param("scope") ConfigScope scope, @Param("msg") String msg);
 }
