@@ -1,10 +1,15 @@
 package org.kondrak.archer.bot.archerism;
 
+import org.kondrak.archer.bot.configuration.ConfigScope;
+import org.kondrak.archer.bot.configuration.ConfigType;
+import org.kondrak.archer.bot.configuration.Configuration;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
 import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
@@ -28,12 +33,14 @@ public class ArcherismBasicCommand extends AbstractMessageCommand {
 
     @Override
     public void execute(IMessage input) {
-        int rand = new Random().nextInt(sayings.size());
-        Archerism randMessage = sayings.get(rand);
-        try {
-            input.reply(randMessage.getText());
-        } catch(MissingPermissionsException | RateLimitException | DiscordException ex) {
-            LOG.error("Could not reply to archerism command: ", ex);
+        if(configService.isConfiguredForGuild(input.getGuild(), input.getAuthor(), ConfigType.ARCHERISM_COMMAND)) {
+            int rand = new Random().nextInt(sayings.size());
+            Archerism randMessage = sayings.get(rand);
+            try {
+                input.reply(randMessage.getText());
+            } catch (MissingPermissionsException | RateLimitException | DiscordException ex) {
+                LOG.error("Could not reply to archerism command: ", ex);
+            }
         }
     }
 

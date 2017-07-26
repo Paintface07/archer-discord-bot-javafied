@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MentionEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageDeleteEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.MessageEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.obj.IMessage;
@@ -31,7 +30,7 @@ public class MessageListener extends AbstractListener {
         IMessage msg = e.getMessage();
         LOG.info("Channel: {} Author: {} - {}", msg.getChannel(),  msg.getAuthor(),  msg);
         msgDao.saveMessage(msg);
-        getRegistry().getCommandsAsList().forEach(cmd -> {
+        getRegistry().getCommandsAsList().forEach((cmd) -> {
             if(cmd.shouldExecute(msg)) {
                 cmd.execute(msg);
             }
@@ -40,19 +39,19 @@ public class MessageListener extends AbstractListener {
 
     // TODO: add a mentions table that ties back to messages and/or message history
     @EventSubscriber
-    public void onMention(MessageEvent e) {
-        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
+    public void onMention(MentionEvent e) {
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     // TODO: add deletes and a message history table to preserve message history
     @EventSubscriber
     public void onDelete(MessageDeleteEvent e) {
-        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 
     // TODO: add updates and a message history table to preserve message history
     @EventSubscriber
     public void onUpdate(MessageUpdateEvent e) {
-        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
+        LOG.info("Event triggered: {}", e.getClass().getName());
     }
 }

@@ -1,5 +1,7 @@
 package org.kondrak.archer.bot.core;
 
+import org.kondrak.archer.bot.configuration.ConfigDao;
+import org.kondrak.archer.bot.configuration.ConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.IDiscordClient;
@@ -17,10 +19,12 @@ public abstract class AbstractMessageCommand implements MessageEventCommand {
 
     private final ArcherBotContext ctx;
     private final String command;
+    protected final ConfigurationService configService;
 
     public AbstractMessageCommand(ArcherBotContext ctx, String command) {
         this.ctx = ctx;
         this.command = command;
+        this.configService = new ConfigurationService(ctx.getFactory());
     }
 
     @Override
