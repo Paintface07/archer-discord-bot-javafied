@@ -95,12 +95,12 @@ public class UserListener extends AbstractListener {
     public void onVoiceLeave(UserVoiceChannelLeaveEvent e) {
         // TODO: Add a command to configure this setting (and others)
         LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
-        for(IChannel c : e.getGuild().getChannels()) {
-            String textChannelName = e.getVoiceChannel().getName().toLowerCase();
-            if(c.getName().equalsIgnoreCase(textChannelName)) {
-                c.sendMessage(e.getUser().getName() + " disconnected.");
-            }
-        }
+//        for(IChannel c : e.getGuild().getChannels()) {
+//            String textChannelName = e.getVoiceChannel().getName().toLowerCase();
+//            if(c.getName().equalsIgnoreCase(textChannelName)) {
+//                c.sendMessage(e.getUser().getName() + " disconnected.");
+//            }
+//        }
     }
 
     @EventSubscriber

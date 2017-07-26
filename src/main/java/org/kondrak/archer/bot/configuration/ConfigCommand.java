@@ -13,4 +13,12 @@ public enum ConfigCommand {
     public String toString() {
         return value;
     }
+
+    public static String anyOfRegex() {
+        return "(?>" + pipeDelimited() + ")";
+    }
+
+    public static String pipeDelimited() {
+        return ADD + "|" + REMOVE + "|" + SHOW;
+    }
 }

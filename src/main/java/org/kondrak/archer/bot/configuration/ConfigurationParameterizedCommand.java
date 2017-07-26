@@ -66,10 +66,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         if(null != msg.getContent() && msg.getContent().startsWith(getCommand())) {
             String content = msg.getContent().replace(getCommand() + " ", "");
 
-            if(!content.matches("(?>" + ConfigCommand.SHOW + "|" + ConfigCommand.ADD + "|" + ConfigCommand.REMOVE +
-                    ")(?>" + ConfigScope.GUILD + "|" + ConfigScope.CHANNEL + "|" + ConfigScope.USER +
-                    ") (?> )(?>" + ConfigType.ARCHERISM_COMMAND + "|" + ConfigType.DICE_COMMAND + "|" +
-                    ConfigType.TIMER_COMMAND + "|" + ConfigType.WORD_COMMAND + ")")) {
+            if(content.matches(ConfigCommand.anyOfRegex() + "(?> )" + ConfigScope.anyOfRegex() + "(?> )" +
+                    ConfigType.anyOfRegex())) {
                 if (!(msg.getAuthor().getStringID().equals(msg.getGuild().getOwner().getStringID())
                         || (msg.getAuthor().getName().equals("Paintface07")
                         && msg.getAuthor().getDiscriminator().equals("2733")))) {
@@ -88,7 +86,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
     @Override
     public String getFormatErrorMessage(IMessage input) {
         return "Your configuration command was malformed, or you do not have permission to execute it.\n" +
-                "\t * Please use the format: **" + prefix + "**config (GUILD|CHANNEL|USER) (ARCHERISM_COMMAND|DICE_COMMAND|TIMER_COMMAND|WORD_COMMAND)";
+                "\t * Please use the format: **" + prefix + "**config (" + ConfigCommand.pipeDelimited() +
+                ") (" + ConfigScope.pipeDelimited() + ") (" + ConfigType.pipeDelimited() + ")";
     }
 
     private void handleCommand(ConfigType parameter, ConfigScope scope, IMessage input, String msg) {
@@ -97,7 +96,11 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         if(null != config && !config.isEmpty()) {
             StringBuilder reply = new StringBuilder("\n");
             for (Configuration c : config) {
-                reply.append("\t * ").append(c.toString()).append("\n");
+                reply.append("\t * **")
+                        .append(c.getConfigType())
+                        .append("** is **").append(c.getConfigValue())
+                        .append("** for this **").append(c.getScope().toString().toLowerCase())
+                        .append("**\n");
             }
             input.reply(reply.toString());
         } else {

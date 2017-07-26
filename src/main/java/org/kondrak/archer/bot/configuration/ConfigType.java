@@ -16,4 +16,12 @@ public enum ConfigType {
     public String toString() {
         return value;
     }
+
+    public static String anyOfRegex() {
+        return "(?>" + pipeDelimited() + ")";
+    }
+
+    public static String pipeDelimited() {
+        return ARCHERISM_COMMAND + "|" + DICE_COMMAND + "|" + TIMER_COMMAND + "|" + WORD_COMMAND;
+    }
 }
