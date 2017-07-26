@@ -62,8 +62,8 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
     @Override
     public boolean shouldExecute(IMessage msg) {
         return null != msg.getContent() && msg.getContent().startsWith(getCommand())
-                && msg.getAuthor().getName().equals("Paintface07")
-                && msg.getAuthor().getDiscriminator().equals("2733");
+                && msg.getAuthor().getName().equals(getCtx().getProperties().getProperty("admin.name"))
+                && msg.getAuthor().getDiscriminator().equals(getCtx().getProperties().getProperty("admin.discriminator"));
     }
 
     @Override

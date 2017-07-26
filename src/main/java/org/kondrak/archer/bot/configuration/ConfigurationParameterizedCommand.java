@@ -52,8 +52,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             if(content.matches(ConfigCommand.anyOfRegex() + "(?> )" + ConfigScope.anyOfRegex() + "(?> )" +
                     ConfigType.anyOfRegex())) {
                 if (!(msg.getAuthor().getStringID().equals(msg.getGuild().getOwner().getStringID())
-                        || (msg.getAuthor().getName().equals("Paintface07")
-                        && msg.getAuthor().getDiscriminator().equals("2733")))) {
+                        || (msg.getAuthor().getName().equals(getCtx().getProperties().getProperty("admin.name"))
+                        && msg.getAuthor().getDiscriminator().equals(getCtx().getProperties().getProperty("admin.discriminator"))))) {
                     handleFormatError(msg);
                 } else {
                     return true;

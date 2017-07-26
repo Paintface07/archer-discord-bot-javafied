@@ -59,4 +59,8 @@ public abstract class AbstractMessageCommand implements MessageEventCommand {
     public IDiscordClient getClient() {
         return ctx.getClient();
     }
+
+    public ArcherBotContext getCtx() {
+        return ctx;
+    }
 }
