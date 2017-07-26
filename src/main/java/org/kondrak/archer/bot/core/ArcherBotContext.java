@@ -25,6 +25,8 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.DiscordException;
 
+import java.util.Properties;
+
 /**
  * Created by Administrator on 2/24/2017.
  */
@@ -34,20 +36,20 @@ public class ArcherBotContext {
 
     public static final String EVENT_LOGGER_FORMAT = "Event triggered: {}";
 
-    private final String[] args;
-    private final PGConnectionPoolDataSource ds;
+    private final Properties properties;
     private final SqlSessionFactory factory;
     private final IDiscordClient client;
     private final CommandRegistry registry;
     private final EventDispatcher dispatcher;
     private final String prefix;
 
-    public ArcherBotContext(String[] args) {
-        this.args = args;
-        this.ds = setupDataSource(args[1], args[2], args[3], args[5]);
-        this.factory = configureMybatis(args[1], args[2], args[3], args[5]);
-        this.client = setupClient(args[0]);
-        this.prefix = args[4];
+    public ArcherBotContext(Properties props) {
+        this.properties = props;
+        this.factory = configureMybatis(props.getProperty("db.server"),
+                props.getProperty("db.user"), props.getProperty("db.password"),
+                props.getProperty("db.name"));
+        this.client = setupClient(props.getProperty("discord.token"));
+        this.prefix = props.getProperty("app.prefix");
 
         this.registry = new CommandRegistry(client);
         registry.registerAll(
@@ -120,16 +122,12 @@ public class ArcherBotContext {
         return dispatcher;
     }
 
-    public String[] getArgs() {
-        return args;
+    public Properties getProperties() {
+        return properties;
     }
 
     public String getPrefix() {
         return prefix;
-    }
-
-    public PGConnectionPoolDataSource getDatasource() {
-        return ds;
     }
 
     public SqlSessionFactory getFactory() {
