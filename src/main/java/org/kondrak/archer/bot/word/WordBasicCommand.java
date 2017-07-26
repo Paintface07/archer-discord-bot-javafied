@@ -41,9 +41,9 @@ public class WordBasicCommand extends AbstractMessageCommand {
         StringBuilder table = new StringBuilder("");
         Long total = 0L;
 
-        for(Statistic s : values) {
-            Long ct = Long.valueOf(s.getValue());
-            table.append("- " + s.getKey() + ": " + ct + "\n");
+        for(int s = 0; s < values.size(); s++) {
+            Long ct = Long.valueOf(values.get(s).getValue());
+            table.append("- "+ (s + 1) + ": " + values.get(s).getKey() + ": " + ct + "\n");
             total += ct;
         }
 
