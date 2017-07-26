@@ -13,10 +13,12 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
     public static final Logger LOG = LoggerFactory.getLogger(ConfigurationParameterizedCommand.class);
 
     private final ConfigDao configDao;
+    private final String prefix;
 
     public ConfigurationParameterizedCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
         this.configDao = new ConfigDao(ctx.getFactory());
+        this.prefix = ctx.getPrefix();
     }
 
     @Override
@@ -62,12 +64,21 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
     @Override
     public boolean shouldExecute(IMessage msg) {
         if(null != msg.getContent() && msg.getContent().startsWith(getCommand())) {
-            if(!(msg.getAuthor().getStringID().equals(msg.getGuild().getOwner().getStringID())
-                    || (msg.getAuthor().getName().equals("Paintface07")
-                    && msg.getAuthor().getDiscriminator().equals("2733")))) {
-                handleFormatError(msg);
+            String content = msg.getContent().replace(getCommand() + " ", "");
+
+            if(!content.matches("(?>" + ConfigCommand.SHOW + "|" + ConfigCommand.ADD + "|" + ConfigCommand.REMOVE +
+                    ")(?>" + ConfigScope.GUILD + "|" + ConfigScope.CHANNEL + "|" + ConfigScope.USER +
+                    ") (?> )(?>" + ConfigType.ARCHERISM_COMMAND + "|" + ConfigType.DICE_COMMAND + "|" +
+                    ConfigType.TIMER_COMMAND + "|" + ConfigType.WORD_COMMAND + ")")) {
+                if (!(msg.getAuthor().getStringID().equals(msg.getGuild().getOwner().getStringID())
+                        || (msg.getAuthor().getName().equals("Paintface07")
+                        && msg.getAuthor().getDiscriminator().equals("2733")))) {
+                    handleFormatError(msg);
+                } else {
+                    return true;
+                }
             } else {
-                return true;
+                handleFormatError(msg);
             }
         }
 
@@ -76,7 +87,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
     @Override
     public String getFormatErrorMessage(IMessage input) {
-        return "Your configuration command was malformed, or you do not have permission to execute it.";
+        return "Your configuration command was malformed, or you do not have permission to execute it.\n" +
+                "\t * Please use the format: **" + prefix + "**config (GUILD|CHANNEL|USER) (ARCHERISM_COMMAND|DICE_COMMAND|TIMER_COMMAND|WORD_COMMAND)";
     }
 
     private void handleCommand(ConfigType parameter, ConfigScope scope, IMessage input, String msg) {

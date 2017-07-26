@@ -30,9 +30,6 @@ public abstract class AbstractMessageCommand implements MessageEventCommand {
     }
 
     @Override
-    public abstract void execute(IMessage msg);
-
-    @Override
     public String getFormatErrorMessage(IMessage input) {
         // default to throwing an exception for implementations that do not implement their own error messages
         throw new UnsupportedOperationException("An error message is not implemented for " + getClass().getName() + ".");

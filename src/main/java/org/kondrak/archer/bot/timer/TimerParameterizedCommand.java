@@ -56,7 +56,7 @@ public class TimerParameterizedCommand extends AbstractMessageCommand {
     @Override
     public boolean shouldExecute(IMessage input) {
         if(null != input.getContent() && input.getContent().startsWith(getCommand())) {
-            String content = input.getContent().replace(getCommand()+ " ", "");
+            String content = input.getContent().replace(getCommand() + " ", "");
 
             if(!content.matches("[0-9]{1,13}[ ][A-z, ]+")) {
                 handleFormatError(input);
