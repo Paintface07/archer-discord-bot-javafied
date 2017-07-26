@@ -93,7 +93,7 @@ public class ArcherBotContext {
         try {
             return buildClient(appKey, true);
         } catch(DiscordException dx) {
-            LOG.error("Could not create discord client!");
+            LOG.error("Could not create discord client!", dx);
             return null;
         }
     }
