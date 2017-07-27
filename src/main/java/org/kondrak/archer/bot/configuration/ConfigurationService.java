@@ -1,7 +1,9 @@
 package org.kondrak.archer.bot.configuration;
 
 import org.apache.ibatis.session.SqlSessionFactory;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.List;
@@ -17,9 +19,25 @@ public class ConfigurationService {
 
     // TODO: make the configuration check an abstraction so it is executed by every command
     // TODO: fix always passing.  Need to add guild ID to query.
-    public boolean isConfiguredForGuild(IGuild guild, IUser user, ConfigType type){
-        return configDao.getConfigurationByNameScopeAndType(ConfigType.ARCHERISM_COMMAND,
+    public boolean isConfiguredForGuild(IGuild guild, ConfigType type) {
+        return configDao.getConfigurationByNameScopeAndType(type,
                 ConfigScope.GUILD, guild.getStringID())
+                .stream().map(c -> Boolean.parseBoolean(c.getConfigValue()))
+                .collect(Collectors.toList())
+                .contains(true);
+    }
+
+    public boolean isConfiguredForChannel(IChannel channel, ConfigType type) {
+        return configDao.getConfigurationByNameScopeAndType(type,
+                ConfigScope.GUILD, channel.getStringID())
+                .stream().map(c -> Boolean.parseBoolean(c.getConfigValue()))
+                .collect(Collectors.toList())
+                .contains(true);
+    }
+
+    public boolean isConfiguredForUser(IUser user, ConfigType type) {
+        return configDao.getConfigurationByNameScopeAndType(type,
+                ConfigScope.GUILD, user.getStringID())
                 .stream().map(c -> Boolean.parseBoolean(c.getConfigValue()))
                 .collect(Collectors.toList())
                 .contains(true);

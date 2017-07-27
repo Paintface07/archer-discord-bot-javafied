@@ -35,23 +35,18 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             String[] p = content.replaceFirst(ADD + " ", "").split(" ");
             if (p.length == 2) {
                 ConfigScope scope = ConfigScope.valueOf(p[0]);
+                ConfigType type = ConfigType.valueOf(p[1]);
                 switch(scope) {
                     case GUILD:
-                        ConfigType type = ConfigType.valueOf(p[1]);
-                        if(!configService.isConfiguredForGuild(input.getGuild(), input.getAuthor(), type)) {
-                            int inserts = configService.addBooleanConfiguration(type, scope, input.getGuild().getStringID());
-                            if(inserts > 0) {
-                                input.reply("**" + type + "** was configured for this **" + GUILD + "**.");
-                            }
-                        } else {
-                            input.reply("**" + type + "** is already configured for this **" + GUILD + "**.");
-                        }
+                        addCommand(type, scope, input);
                         break;
                     case CHANNEL:
                         input.reply("Adding channel configurations is not yet supported.");
+//                        addCommand(type, scope, input);
                         break;
                     case USER:
                         input.reply("Adding user configurations is not yet supported.");
+//                        addCommand(type, scope, input);
                         break;
                     default:
                         input.reply("'" + scope + "' is not a valid configuration scope.");
@@ -64,17 +59,20 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         } else if(content.startsWith(SHOW + " ")) {
             String[] p = content.replaceFirst(SHOW + " ", "").split(" ");
             if(p.length == 2) {
-                ConfigScope type = ConfigScope.valueOf(p[0]);
+                ConfigScope scope = ConfigScope.valueOf(p[0]);
+                ConfigType type = ConfigType.valueOf(p[1]);
                 if(p[1] != null) {
-                    switch (type) {
+                    switch (scope) {
                         case GUILD:
-                            showCommand(ConfigType.valueOf(p[1]), type, input, GUILD.toString().toLowerCase());
+                            showCommand(type, scope, input);
                             break;
                         case CHANNEL:
-                            showCommand(ConfigType.valueOf(p[1]), type, input, CHANNEL.toString().toLowerCase());
+//                            showCommand(type, scope, input);
+                            input.reply("Displaying channel configurations is not yet supported.");
                             break;
                         case USER:
-                            showCommand(ConfigType.valueOf(p[1]), type, input, USER.toString().toLowerCase());
+//                            showCommand(type, scope, input);
+                            input.reply("Displaying user configurations is not yet supported.");
                             break;
                         default:
                             handleFormatError(input);
@@ -121,9 +119,9 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                 ") (" + ConfigScope.pipeDelimited() + ") (" + ConfigType.pipeDelimited() + ")";
     }
 
-    private void showCommand(ConfigType parameter, ConfigScope scope, IMessage input, String msg) {
-        List<Configuration> config = configService.getConfigurationByNameScopeAndType(parameter,
-                scope, input.getGuild().getStringID());
+    private void showCommand(ConfigType type, ConfigScope scope, IMessage input) {
+        List<Configuration> config = configService.getConfigurationByNameScopeAndType(type, scope,
+                input.getGuild().getStringID());
         if(null != config && !config.isEmpty()) {
             StringBuilder reply = new StringBuilder("\n");
             for (Configuration c : config) {
@@ -135,7 +133,19 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             }
             input.reply(reply.toString());
         } else {
-            input.reply("No "+ msg + " configurations are setup.");
+            input.reply("No "+ type + " configurations are setup.");
+        }
+    }
+
+    // TODO: use IDiscordObject instead so arbitrary stringIDs can be handled
+    private void addCommand(ConfigType type, ConfigScope scope, IMessage input) {
+        if(!configService.isConfiguredForGuild(input.getGuild(), type)) {
+            int inserts = configService.addBooleanConfiguration(type, scope, input.getGuild().getStringID());
+            if(inserts > 0) {
+                input.reply("**" + type + "** was configured for this **" + scope + "**.");
+            }
+        } else {
+            input.reply("**" + type + "** is already configured for this **" + scope + "**.");
         }
     }
 }

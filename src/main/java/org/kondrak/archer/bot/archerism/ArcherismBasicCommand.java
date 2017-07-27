@@ -45,7 +45,7 @@ public class ArcherismBasicCommand extends AbstractMessageCommand {
     @Override
     public boolean shouldExecute(IMessage input) {
         return null != input.getContent() && input.getContent().startsWith(getCommand())
-                && configService.isConfiguredForGuild(input.getGuild(), input.getAuthor(), ConfigType.ARCHERISM_COMMAND);
+                && configService.isConfiguredForGuild(input.getGuild(), ConfigType.ARCHERISM_COMMAND);
     }
 
     @Override
