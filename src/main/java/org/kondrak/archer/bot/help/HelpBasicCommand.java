@@ -1,5 +1,8 @@
 package org.kondrak.archer.bot.help;
 
+import org.kondrak.archer.bot.configuration.ConfigCommand;
+import org.kondrak.archer.bot.configuration.ConfigScope;
+import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
 import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ public class HelpBasicCommand extends AbstractMessageCommand {
 
     private final String helpText;
 
+    // TODO: add an admin flavor of this command so admin commands don't display alongside user commands
     public HelpBasicCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
         final String prefix = ctx.getPrefix();
@@ -32,7 +36,9 @@ public class HelpBasicCommand extends AbstractMessageCommand {
                 LINE_PREFIX + prefix + "help** - display help information on the commands you can use\n" +
                 LINE_PREFIX + prefix + "word <word/phrase>** - display the number of word usages by user\n" +
                 LINE_PREFIX + prefix + "timer <ms up to 13 characters> <name>** - start a timer\n"+
-                LINE_PREFIX + prefix + "roll <number up to 3 characters>d<sides up to 3 characters>** - roll one or more dice" +
+                LINE_PREFIX + prefix + "roll <number up to 3 characters>d<sides up to 3 characters>** - roll one or more dice\n" +
+                LINE_PREFIX + prefix + "config (" + ConfigCommand.pipeDelimited() + ") (" + ConfigScope.pipeDelimited()
+                        + ") (" + ConfigType.pipeDelimited() + ")** - configure commands\n" +
                 "==============================================================================";
     }
 

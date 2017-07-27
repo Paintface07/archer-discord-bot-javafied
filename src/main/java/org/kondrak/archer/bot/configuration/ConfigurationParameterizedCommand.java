@@ -57,7 +57,6 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                 switch(scope) {
                     case GUILD:
                         removeCommand(type, scope, input);
-//                        input.reply("Removing guild configurations is not yet supported.");
                         break;
                     case CHANNEL:
                         input.reply("Removing channel configurations is not yet supported.");
