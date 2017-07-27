@@ -39,6 +39,7 @@ public class MessageDao extends AbstractDao {
         } catch(PersistenceException ex) {
             LOG.error("Error saving message: ", ex);
             session.rollback();
+            session.close();
         } finally {
             session.close();
         }

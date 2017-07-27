@@ -11,9 +11,6 @@ import java.util.List;
 import static org.kondrak.archer.bot.configuration.ConfigCommand.ADD;
 import static org.kondrak.archer.bot.configuration.ConfigCommand.REMOVE;
 import static org.kondrak.archer.bot.configuration.ConfigCommand.SHOW;
-import static org.kondrak.archer.bot.configuration.ConfigScope.GUILD;
-import static org.kondrak.archer.bot.configuration.ConfigScope.CHANNEL;
-import static org.kondrak.archer.bot.configuration.ConfigScope.USER;
 
 public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
@@ -42,20 +39,38 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                         break;
                     case CHANNEL:
                         input.reply("Adding channel configurations is not yet supported.");
-//                        addCommand(type, scope, input);
                         break;
                     case USER:
                         input.reply("Adding user configurations is not yet supported.");
-//                        addCommand(type, scope, input);
                         break;
                     default:
-                        input.reply("'" + scope + "' is not a valid configuration scope.");
+                        handleFormatError(input);
                 }
             } else {
                 handleFormatError(input);
             }
         } else if(content.startsWith(REMOVE + " ")) {
-            input.reply("Removing configurations are not yet supported.");
+            String[] p = content.replaceFirst(REMOVE + " ", "").split(" ");
+            if (p.length == 2) {
+                ConfigScope scope = ConfigScope.valueOf(p[0]);
+                ConfigType type = ConfigType.valueOf(p[1]);
+                switch(scope) {
+                    case GUILD:
+//                        removeCommand(type, scope, input);
+                        input.reply("Removing guild configurations is not yet supported.");
+                        break;
+                    case CHANNEL:
+                        input.reply("Removing channel configurations is not yet supported.");
+                        break;
+                    case USER:
+                        input.reply("Removing user configurations is not yet supported.");
+                        break;
+                    default:
+                        handleFormatError(input);
+                }
+            } else {
+                handleFormatError(input);
+            }
         } else if(content.startsWith(SHOW + " ")) {
             String[] p = content.replaceFirst(SHOW + " ", "").split(" ");
             if(p.length == 2) {
@@ -67,11 +82,9 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                             showCommand(type, scope, input);
                             break;
                         case CHANNEL:
-//                            showCommand(type, scope, input);
                             input.reply("Displaying channel configurations is not yet supported.");
                             break;
                         case USER:
-//                            showCommand(type, scope, input);
                             input.reply("Displaying user configurations is not yet supported.");
                             break;
                         default:
@@ -133,7 +146,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             }
             input.reply(reply.toString());
         } else {
-            input.reply("No "+ type + " configurations are setup.");
+            input.reply("No **"+ type + "** configurations are configured for this **" + scope + "**.");
         }
     }
 
@@ -146,6 +159,17 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             }
         } else {
             input.reply("**" + type + "** is already configured for this **" + scope + "**.");
+        }
+    }
+
+    private void removeCommand(ConfigType type, ConfigScope scope, IMessage input) {
+        if(configService.isConfiguredForGuild(input.getGuild(), type)) {
+            int deletions = configService.removeBooleanConfiguration(type, scope, input.getGuild().getStringID());
+            if(deletions > 0) {
+                input.reply("**" + type + "** was configured for this **" + scope + "**.");
+            }
+        } else {
+            input.reply("No **"+ type + "** configurations can be removed for this **" + scope + "** because none are configured.");
         }
     }
 }

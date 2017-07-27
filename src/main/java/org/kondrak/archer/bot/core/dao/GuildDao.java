@@ -40,6 +40,7 @@ public class GuildDao extends AbstractDao {
         } catch(PersistenceException ex) {
             LOG.error("Error saving guild: ", ex);
             session.rollback();
+            session.close();
         } finally {
             session.close();
         }

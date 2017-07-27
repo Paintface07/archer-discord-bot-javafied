@@ -40,6 +40,7 @@ public class ChannelDao extends AbstractDao {
         } catch(PersistenceException ex) {
             LOG.error("Error saving channel: ", ex);
             session.rollback();
+            session.close();
         } finally {
             session.close();
         }

@@ -3,7 +3,6 @@ package org.kondrak.archer.bot.configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class ConfigurationService {
     }
 
     // TODO: make the configuration check an abstraction so it is executed by every command
-    // TODO: fix always passing.  Need to add guild ID to query.
+    // TODO: change these configuration checks so they are more generic
     public boolean isConfiguredForGuild(IGuild guild, ConfigType type) {
         return configDao.getConfigurationByNameScopeAndType(type,
                 ConfigScope.GUILD, guild.getStringID())
@@ -29,7 +28,7 @@ public class ConfigurationService {
 
     public boolean isConfiguredForChannel(IChannel channel, ConfigType type) {
         return configDao.getConfigurationByNameScopeAndType(type,
-                ConfigScope.GUILD, channel.getStringID())
+                ConfigScope.CHANNEL, channel.getStringID())
                 .stream().map(c -> Boolean.parseBoolean(c.getConfigValue()))
                 .collect(Collectors.toList())
                 .contains(true);
@@ -37,7 +36,7 @@ public class ConfigurationService {
 
     public boolean isConfiguredForUser(IUser user, ConfigType type) {
         return configDao.getConfigurationByNameScopeAndType(type,
-                ConfigScope.GUILD, user.getStringID())
+                ConfigScope.USER, user.getStringID())
                 .stream().map(c -> Boolean.parseBoolean(c.getConfigValue()))
                 .collect(Collectors.toList())
                 .contains(true);
@@ -49,5 +48,9 @@ public class ConfigurationService {
 
     public int addBooleanConfiguration(ConfigType type, ConfigScope scope, String guildId) {
         return configDao.addBooleanConfiguration(type, scope, guildId);
+    }
+
+    public int removeBooleanConfiguration(ConfigType type, ConfigScope scope, String guildId) {
+        return configDao.removeBooleanConfiguration(type, scope, guildId);
     }
 }

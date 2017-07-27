@@ -1,6 +1,5 @@
 package org.kondrak.archer.bot.core;
 
-import org.kondrak.archer.bot.configuration.ConfigDao;
 import org.kondrak.archer.bot.configuration.ConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -29,6 +29,7 @@ public class UserDao extends AbstractDao {
         } catch(PersistenceException ex) {
             LOG.error("Error saving user: ", ex);
             session.rollback();
+            session.close();
         } finally {
             session.close();
         }

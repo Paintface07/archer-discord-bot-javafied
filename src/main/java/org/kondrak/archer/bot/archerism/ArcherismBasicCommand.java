@@ -1,15 +1,11 @@
 package org.kondrak.archer.bot.archerism;
 
-import org.kondrak.archer.bot.configuration.ConfigScope;
 import org.kondrak.archer.bot.configuration.ConfigType;
-import org.kondrak.archer.bot.configuration.Configuration;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
 import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;

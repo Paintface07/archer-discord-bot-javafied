@@ -1,8 +1,7 @@
 package org.kondrak.archer.bot.core.listener;
 
-import org.kondrak.archer.bot.configuration.ConfigDao;
-import org.kondrak.archer.bot.core.CommandRegistry;
 import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.CommandRegistry;
 import sx.blah.discord.api.IDiscordClient;
 
 /**

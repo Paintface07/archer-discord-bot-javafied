@@ -26,6 +26,8 @@ public class ConfigDao extends AbstractDao {
             return stats;
         } catch(PersistenceException e) {
             LOG.error("Could not query configuration: ", e);
+            session.rollback();
+            session.close();
         } finally {
             session.close();
         }
@@ -41,6 +43,22 @@ public class ConfigDao extends AbstractDao {
             return inserts;
         } catch(PersistenceException e) {
             LOG.error("Could not add configuration: ", e);
+            session.rollback();
+            session.close();
+        } finally {
+            session.close();
+        }
+        return 0;
+    }
+
+    public int removeBooleanConfiguration(ConfigType type, ConfigScope scope, String guildId) {
+        SqlSession session = factory.openSession();
+        try {
+
+        } catch (PersistenceException e) {
+            LOG.error("Could not remove configuration: ", e);
+            session.rollback();
+            session.close();
         } finally {
             session.close();
         }

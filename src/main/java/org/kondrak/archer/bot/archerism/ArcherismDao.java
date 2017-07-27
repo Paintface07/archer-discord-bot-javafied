@@ -32,6 +32,7 @@ public class ArcherismDao extends AbstractDao {
         } catch(PersistenceException ex) {
             LOG.error("Error selecting archerisms: ", ex);
             session.rollback();
+            session.close();
         } finally {
             session.close();
         }
