@@ -25,6 +25,7 @@ public class HelpBasicCommand extends AbstractMessageCommand {
     private final String helpText;
 
     // TODO: add an admin flavor of this command so admin commands don't display alongside user commands
+    // TODO: make this command more "man-like" and allow for more detailed help descriptions
     public HelpBasicCommand(ArcherBotContext ctx, String command) {
         super(ctx, command);
         final String prefix = ctx.getPrefix();

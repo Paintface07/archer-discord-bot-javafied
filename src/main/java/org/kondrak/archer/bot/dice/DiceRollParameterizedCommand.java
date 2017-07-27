@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.dice;
 
+import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
 import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.slf4j.Logger;
@@ -46,7 +47,8 @@ public class DiceRollParameterizedCommand extends AbstractMessageCommand {
 
     @Override
     public boolean shouldExecute(IMessage input) {
-        if(null != input.getContent() && input.getContent().startsWith(getCommand())) {
+        if(null != input.getContent() && input.getContent().startsWith(getCommand())
+                && configService.isConfiguredForGuild(input.getGuild(), ConfigType.DICE_COMMAND)) {
             String content = input.getContent().replace(getCommand()+ " ", "");
 
             if(!content.matches("[0-9]{1,3}d[0-9]{1,3}")) {

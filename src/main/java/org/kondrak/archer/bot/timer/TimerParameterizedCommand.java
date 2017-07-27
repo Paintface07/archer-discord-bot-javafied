@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.timer;
 
+import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
 import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.kondrak.archer.bot.core.util.Emote;
@@ -55,7 +56,8 @@ public class TimerParameterizedCommand extends AbstractMessageCommand {
 
     @Override
     public boolean shouldExecute(IMessage input) {
-        if(null != input.getContent() && input.getContent().startsWith(getCommand())) {
+        if(null != input.getContent() && input.getContent().startsWith(getCommand())
+                && configService.isConfiguredForGuild(input.getGuild(), ConfigType.TIMER_COMMAND)) {
             String content = input.getContent().replace(getCommand() + " ", "");
 
             if(!content.matches("[0-9]{1,13}[ ][A-z, ]+")) {

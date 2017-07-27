@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.word;
 
+import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
 import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.kondrak.archer.bot.core.dao.MessageDao;
@@ -58,7 +59,8 @@ public class WordBasicCommand extends AbstractMessageCommand {
 
     @Override
     public boolean shouldExecute(IMessage input) {
-        return null != input.getContent() && input.getContent().startsWith(getCommand());
+        return null != input.getContent() && input.getContent().startsWith(getCommand())
+            && configService.isConfiguredForGuild(input.getGuild(), ConfigType.WORD_COMMAND);
     }
 
     @Override
