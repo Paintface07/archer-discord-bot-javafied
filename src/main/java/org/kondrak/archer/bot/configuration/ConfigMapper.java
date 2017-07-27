@@ -1,5 +1,6 @@
 package org.kondrak.archer.bot.configuration;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -47,4 +48,11 @@ public interface ConfigMapper {
                 "#{fkey}",
             ")"})
     int addBooleanConfiguration(@Param("type") ConfigType type, @Param("scope") ConfigScope scope, @Param("fkey") String fkey);
+
+    @Delete({"DELETE FROM configuration_assignment",
+            "WHERE configuration_id = (SELECT configuration_id FROM configuration WHERE configuration_name = #{type})",
+            "AND configuration_scope = #{scope}",
+            "AND configuration_fkey = #{fkey}"
+    })
+    int removeBooleanConfiguration(@Param("type") ConfigType type, @Param("scope") ConfigScope scope, @Param("fkey") String fkey);
 }

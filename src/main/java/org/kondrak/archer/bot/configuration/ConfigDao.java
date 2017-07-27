@@ -54,7 +54,10 @@ public class ConfigDao extends AbstractDao {
     public int removeBooleanConfiguration(ConfigType type, ConfigScope scope, String guildId) {
         SqlSession session = factory.openSession();
         try {
-
+            int deletions = session.getMapper(ConfigMapper.class).removeBooleanConfiguration(type, scope, guildId);
+            session.commit();
+            session.close();
+            return deletions;
         } catch (PersistenceException e) {
             LOG.error("Could not remove configuration: ", e);
             session.rollback();

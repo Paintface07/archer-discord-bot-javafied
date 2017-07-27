@@ -56,8 +56,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                 ConfigType type = ConfigType.valueOf(p[1]);
                 switch(scope) {
                     case GUILD:
-//                        removeCommand(type, scope, input);
-                        input.reply("Removing guild configurations is not yet supported.");
+                        removeCommand(type, scope, input);
+//                        input.reply("Removing guild configurations is not yet supported.");
                         break;
                     case CHANNEL:
                         input.reply("Removing channel configurations is not yet supported.");
@@ -146,7 +146,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             }
             input.reply(reply.toString());
         } else {
-            input.reply("No **"+ type + "** configurations are configured for this **" + scope + "**.");
+            input.reply("No **" + type + "** configurations are configured for this **" + scope + "**.");
         }
     }
 
@@ -169,7 +169,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
                 input.reply("**" + type + "** was configured for this **" + scope + "**.");
             }
         } else {
-            input.reply("No **"+ type + "** configurations can be removed for this **" + scope + "** because none are configured.");
+            input.reply("No **" + type + "** configurations can be removed for this **" + scope + "** because none are configured.");
         }
     }
 }
