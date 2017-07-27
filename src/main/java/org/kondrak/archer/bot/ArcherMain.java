@@ -21,7 +21,7 @@ public class ArcherMain {
             fs = new FileInputStream("config.properties");
             Properties props = new Properties();
             props.load(fs);
-            props.list(System.out);
+//            props.list(System.out);
             new ArcherBotContext(props);
         } catch (IOException ex) {
             LOG.error("Could not open properties file.");

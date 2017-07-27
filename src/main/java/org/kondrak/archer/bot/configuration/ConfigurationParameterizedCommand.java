@@ -8,6 +8,13 @@ import sx.blah.discord.handle.obj.IMessage;
 
 import java.util.List;
 
+import static org.kondrak.archer.bot.configuration.ConfigCommand.ADD;
+import static org.kondrak.archer.bot.configuration.ConfigCommand.REMOVE;
+import static org.kondrak.archer.bot.configuration.ConfigCommand.SHOW;
+import static org.kondrak.archer.bot.configuration.ConfigScope.GUILD;
+import static org.kondrak.archer.bot.configuration.ConfigScope.CHANNEL;
+import static org.kondrak.archer.bot.configuration.ConfigScope.USER;
+
 public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
     public static final Logger LOG = LoggerFactory.getLogger(ConfigurationParameterizedCommand.class);
@@ -24,19 +31,60 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
         // TODO: abstract command parsing into its own class
         String content = input.getContent().replace(getCommand()+ " ", "");
 
-        if(content.startsWith(ConfigCommand.ADD + " ")) {
-//            input.reply("Adding configurations are not yet supported.");
-            String[] p = input.getContent().replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
+        if(content.startsWith(ADD + " ")) {
+            String[] p = content.replaceFirst(ADD + " ", "").split(" ");
             if (p.length == 2) {
-                ConfigScope type = ConfigScope.valueOf(p[0]);
-                configService.addConfiguration(ConfigType.valueOf(p[1]), type, ConfigScope.GUILD.toString().toLowerCase());
+                ConfigScope scope = ConfigScope.valueOf(p[0]);
+                switch(scope) {
+                    case GUILD:
+                        ConfigType type = ConfigType.valueOf(p[1]);
+                        if(!configService.isConfiguredForGuild(input.getGuild(), input.getAuthor(), type)) {
+                            int inserts = configService.addBooleanConfiguration(type, scope, input.getGuild().getStringID());
+                            if(inserts > 0) {
+                                input.reply("**" + type + "** was configured for this **" + GUILD + "**.");
+                            }
+                        } else {
+                            input.reply("**" + type + "** is already configured for this **" + GUILD + "**.");
+                        }
+                        break;
+                    case CHANNEL:
+                        input.reply("Adding channel configurations is not yet supported.");
+                        break;
+                    case USER:
+                        input.reply("Adding user configurations is not yet supported.");
+                        break;
+                    default:
+                        input.reply("'" + scope + "' is not a valid configuration scope.");
+                }
             } else {
                 handleFormatError(input);
             }
-        } else if(content.startsWith(ConfigCommand.REMOVE + " ")) {
+        } else if(content.startsWith(REMOVE + " ")) {
             input.reply("Removing configurations are not yet supported.");
-        } else if(content.startsWith(ConfigCommand.SHOW + " ")) {
-            showCommand(input);
+        } else if(content.startsWith(SHOW + " ")) {
+            String[] p = content.replaceFirst(SHOW + " ", "").split(" ");
+            if(p.length == 2) {
+                ConfigScope type = ConfigScope.valueOf(p[0]);
+                if(p[1] != null) {
+                    switch (type) {
+                        case GUILD:
+                            showCommand(ConfigType.valueOf(p[1]), type, input, GUILD.toString().toLowerCase());
+                            break;
+                        case CHANNEL:
+                            showCommand(ConfigType.valueOf(p[1]), type, input, CHANNEL.toString().toLowerCase());
+                            break;
+                        case USER:
+                            showCommand(ConfigType.valueOf(p[1]), type, input, USER.toString().toLowerCase());
+                            break;
+                        default:
+                            handleFormatError(input);
+                    }
+                } else {
+                    handleFormatError(input);
+                }
+            } else {
+                handleFormatError(input);
+            }
         } else {
             handleFormatError(input);
         }
@@ -88,32 +136,6 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
             input.reply(reply.toString());
         } else {
             input.reply("No "+ msg + " configurations are setup.");
-        }
-    }
-
-    private void showCommand(IMessage msg) {
-        String[] p = msg.getContent().replaceFirst(ConfigCommand.SHOW + " ", "").split(" ");
-        if(p.length == 2) {
-            ConfigScope type = ConfigScope.valueOf(p[0]);
-            if(p[1] != null) {
-                switch (type) {
-                    case GUILD:
-                        showCommand(ConfigType.valueOf(p[1]), type, msg, ConfigScope.GUILD.toString().toLowerCase());
-                        break;
-                    case CHANNEL:
-                        showCommand(ConfigType.valueOf(p[1]), type, msg, ConfigScope.CHANNEL.toString().toLowerCase());
-                        break;
-                    case USER:
-                        showCommand(ConfigType.valueOf(p[1]), type, msg, ConfigScope.USER.toString().toLowerCase());
-                        break;
-                    default:
-                        handleFormatError(msg);
-                }
-            } else {
-                handleFormatError(msg);
-            }
-        } else {
-            handleFormatError(msg);
         }
     }
 }

@@ -37,6 +37,14 @@ public interface ConfigMapper {
     List<Configuration> getConfigurationByNameScopeAndType(@Param("type") ConfigType type, @Param("scope") ConfigScope scope,
             @Param("fkey") String fkey);
 
-    @Insert({"INSERT INTO () VALUES ()"})
-    void addConfiguration(@Param("parameter") ConfigType parameter, @Param("scope") ConfigScope scope, @Param("msg") String msg);
+    @Insert({"INSERT INTO configuration_assignment (",
+                "configuration_id,",
+                "configuration_scope,",
+                "configuration_fkey",
+            ") VALUES (",
+            "(SELECT configuration_id FROM configuration WHERE configuration_name = #{type}),",
+                "#{scope},",
+                "#{fkey}",
+            ")"})
+    int addBooleanConfiguration(@Param("type") ConfigType type, @Param("scope") ConfigScope scope, @Param("fkey") String fkey);
 }
