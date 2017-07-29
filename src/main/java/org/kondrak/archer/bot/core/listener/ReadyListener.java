@@ -1,6 +1,7 @@
 package org.kondrak.archer.bot.core.listener;
 
-import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.Context;
+import org.kondrak.archer.bot.core.ContextBuilder;
 import org.kondrak.archer.bot.core.dao.ChannelDao;
 import org.kondrak.archer.bot.core.dao.GuildDao;
 import org.kondrak.archer.bot.core.dao.UserDao;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2/24/2017.
  */
-public class ReadyListener extends AbstractListener {
+public class ReadyListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReadyListener.class);
 
@@ -25,8 +26,8 @@ public class ReadyListener extends AbstractListener {
     private final GuildDao guildDao;
     private final UserDao userDao;
 
-    public ReadyListener(ArcherBotContext ctx) {
-        super(ctx);
+    public ReadyListener() {
+        ContextBuilder ctx = ContextBuilder.getInstance();
         this.channelDao = new ChannelDao(ctx.getFactory());
         this.guildDao = new GuildDao(ctx.getFactory());
         this.userDao = new UserDao(ctx.getFactory());
@@ -34,8 +35,8 @@ public class ReadyListener extends AbstractListener {
 
     @EventSubscriber
     public void onReady(ReadyEvent e) {
-        LOG.info(ArcherBotContext.EVENT_LOGGER_FORMAT, e.getClass().getName());
-        List<IUser> u = getClient().getUsers();
+        LOG.info(ContextBuilder.EVENT_LOGGER_FORMAT, e.getClass().getName());
+        List<IUser> u = Context.getInstance().getClient().getUsers();
 
         for(int i = 0; i <u.size(); i++) {
             boolean saved = userDao.userIsSaved(u.get(i).getStringID());

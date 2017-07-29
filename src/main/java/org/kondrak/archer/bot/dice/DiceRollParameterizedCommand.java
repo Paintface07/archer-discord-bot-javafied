@@ -2,7 +2,6 @@ package org.kondrak.archer.bot.dice;
 
 import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
@@ -19,8 +18,8 @@ public class DiceRollParameterizedCommand extends AbstractMessageCommand {
 
     private static final Logger LOG = LoggerFactory.getLogger(DiceRollParameterizedCommand.class);
 
-    public DiceRollParameterizedCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
+    public DiceRollParameterizedCommand(String command) {
+        super(command);
     }
 
     // TODO : make these types of commands have their own interface and abstract class to avoid repetition regex application

@@ -1,6 +1,5 @@
 package org.kondrak.archer.bot.configuration;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -12,8 +11,8 @@ public class ConfigurationService {
 
     private final ConfigDao configDao;
 
-    public ConfigurationService(SqlSessionFactory factory) {
-        this.configDao = new ConfigDao(factory);
+    public ConfigurationService(ConfigDao dao) {
+        this.configDao = dao;
     }
 
     // TODO: make the configuration check an abstraction so it is executed by every command

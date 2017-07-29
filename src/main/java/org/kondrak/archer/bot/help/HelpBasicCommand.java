@@ -4,9 +4,10 @@ import org.kondrak.archer.bot.configuration.ConfigCommand;
 import org.kondrak.archer.bot.configuration.ConfigScope;
 import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MessageBuilder;
@@ -26,9 +27,9 @@ public class HelpBasicCommand extends AbstractMessageCommand {
 
     // TODO: add an admin flavor of this command so admin commands don't display alongside user commands
     // TODO: make this command more "man-like" and allow for more detailed help descriptions
-    public HelpBasicCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
-        final String prefix = ctx.getPrefix();
+    public HelpBasicCommand(String command) {
+        super(command);
+        String prefix = Context.getInstance().getPrefix();
         this.helpText =
                 "==============================================================================\n" +
                 "== **Available Commands:**\n" +
@@ -46,10 +47,11 @@ public class HelpBasicCommand extends AbstractMessageCommand {
     @Override
     public void execute(IMessage input) {
         try {
-            new MessageBuilder(this.getClient()).withChannel(
-                    getClient().getOrCreatePMChannel(input.getAuthor())).withContent(helpText).send();
+            IDiscordClient client = Context.getInstance().getClient();
+            new MessageBuilder(client).withChannel(
+                    client.getOrCreatePMChannel(input.getAuthor())).withContent(helpText).send();
         } catch(RateLimitException | DiscordException | MissingPermissionsException ex) {
-            LOG.error("Could not build/send help message");
+            LOG.error("Could not builder/send help message");
         }
     }
 

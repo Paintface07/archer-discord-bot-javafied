@@ -3,7 +3,6 @@ package org.kondrak.archer.bot.core;
 import org.kondrak.archer.bot.configuration.ConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -16,14 +15,13 @@ public abstract class AbstractMessageCommand implements MessageEventCommand {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMessageCommand.class);
 
-    private final ArcherBotContext ctx;
     private final String command;
     protected final ConfigurationService configService;
 
-    public AbstractMessageCommand(ArcherBotContext ctx, String command) {
-        this.ctx = ctx;
-        this.command = command;
-        this.configService = new ConfigurationService(ctx.getFactory());
+    public AbstractMessageCommand(String command) {
+        Context ctx = Context.getInstance();
+        this.command = ctx.getPrefix() + command;
+        this.configService = ctx.getConfigService();
     }
 
     @Override
@@ -49,17 +47,5 @@ public abstract class AbstractMessageCommand implements MessageEventCommand {
 
     public String getCommand() {
         return this.command;
-    }
-
-    public CommandRegistry getRegistry() {
-        return ctx.getRegistry();
-    }
-
-    public IDiscordClient getClient() {
-        return ctx.getClient();
-    }
-
-    public ArcherBotContext getCtx() {
-        return ctx;
     }
 }

@@ -2,7 +2,7 @@ package org.kondrak.archer.bot.word;
 
 import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.Context;
 import org.kondrak.archer.bot.core.dao.MessageDao;
 import org.kondrak.archer.bot.core.model.Statistic;
 import org.slf4j.Logger;
@@ -24,9 +24,9 @@ public class WordBasicCommand extends AbstractMessageCommand {
 
     private MessageDao messageDao;
 
-    public WordBasicCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
-        messageDao = new MessageDao(ctx.getFactory());
+    public WordBasicCommand(String command) {
+        super(command);
+        messageDao = new MessageDao(Context.getInstance().getFactory());
     }
 
     @Override

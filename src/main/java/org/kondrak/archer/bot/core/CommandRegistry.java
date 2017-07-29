@@ -20,13 +20,13 @@ public class CommandRegistry {
         registerAllCommands(commands);
     }
 
-    public CommandRegistry register(MessageEventCommand command) {
-        commands.add(command);
+    public CommandRegistry registerAll(MessageEventCommand... commands) {
+        registerAllCommands(commands);
         return this;
     }
 
-    public CommandRegistry registerAll(MessageEventCommand... commands) {
-        registerAllCommands(commands);
+    public CommandRegistry registerAll(List<MessageEventCommand> commands) {
+        this.commands.addAll(commands);
         return this;
     }
 

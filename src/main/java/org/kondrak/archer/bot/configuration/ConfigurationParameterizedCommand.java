@@ -1,7 +1,7 @@
 package org.kondrak.archer.bot.configuration;
 
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
@@ -16,11 +16,8 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
     public static final Logger LOG = LoggerFactory.getLogger(ConfigurationParameterizedCommand.class);
 
-    private final String prefix;
-
-    public ConfigurationParameterizedCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
-        this.prefix = ctx.getPrefix();
+    public ConfigurationParameterizedCommand(String command) {
+        super(command);
     }
 
     @Override
@@ -109,9 +106,10 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
 
             if(content.matches(ConfigCommand.anyOfRegex() + "(?> )" + ConfigScope.anyOfRegex() + "(?> )" +
                     ConfigType.anyOfRegex())) {
+                Context ctx = Context.getInstance();
                 if (!(msg.getAuthor().getStringID().equals(msg.getGuild().getOwner().getStringID())
-                        || (msg.getAuthor().getName().equals(getCtx().getProperties().getProperty("admin.name"))
-                        && msg.getAuthor().getDiscriminator().equals(getCtx().getProperties().getProperty("admin.discriminator"))))) {
+                        || (msg.getAuthor().getName().equals(ctx.getProperties().getProperty("admin.name"))
+                        && msg.getAuthor().getDiscriminator().equals(ctx.getProperties().getProperty("admin.discriminator"))))) {
                     handleFormatError(msg);
                 } else {
                     return true;
@@ -127,7 +125,7 @@ public class ConfigurationParameterizedCommand extends AbstractMessageCommand {
     @Override
     public String getFormatErrorMessage(IMessage input) {
         return "Your configuration command was malformed, or you do not have permission to execute it.\n" +
-                "\t * Please use the format: **" + prefix + "**config (" + ConfigCommand.pipeDelimited() +
+                "\t * Please use the format: **" + Context.getInstance().getPrefix() + "**config (" + ConfigCommand.pipeDelimited() +
                 ") (" + ConfigScope.pipeDelimited() + ") (" + ConfigType.pipeDelimited() + ")";
     }
 

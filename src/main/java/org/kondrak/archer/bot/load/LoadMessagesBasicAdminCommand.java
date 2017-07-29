@@ -1,7 +1,7 @@
 package org.kondrak.archer.bot.load;
 
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.Context;
 import org.kondrak.archer.bot.core.dao.MessageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +24,9 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
 
     private MessageDao messageDao;
 
-    public LoadMessagesBasicAdminCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
-        messageDao = new MessageDao(ctx.getFactory());
+    public LoadMessagesBasicAdminCommand(String command) {
+        super(command);
+        messageDao = new MessageDao(Context.getInstance().getFactory());
     }
 
     @Override
@@ -61,9 +61,10 @@ public class LoadMessagesBasicAdminCommand extends AbstractMessageCommand {
 
     @Override
     public boolean shouldExecute(IMessage msg) {
+        Context ctx = Context.getInstance();
         return null != msg.getContent() && msg.getContent().startsWith(getCommand())
-                && msg.getAuthor().getName().equals(getCtx().getProperties().getProperty("admin.name"))
-                && msg.getAuthor().getDiscriminator().equals(getCtx().getProperties().getProperty("admin.discriminator"));
+                && msg.getAuthor().getName().equals(ctx.getProperties().getProperty("admin.name"))
+                && msg.getAuthor().getDiscriminator().equals(ctx.getProperties().getProperty("admin.discriminator"));
     }
 
     @Override

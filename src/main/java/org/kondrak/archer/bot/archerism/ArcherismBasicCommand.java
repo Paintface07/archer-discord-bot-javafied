@@ -2,7 +2,6 @@ package org.kondrak.archer.bot.archerism;
 
 import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IMessage;
@@ -20,15 +19,16 @@ public class ArcherismBasicCommand extends AbstractMessageCommand {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArcherismBasicCommand.class);
 
-    private final List<Archerism> sayings;
+    private ArcherismDao dao;
 
-    public ArcherismBasicCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
-        this.sayings = new ArcherismDao(ctx.getFactory()).getArcherisms();
+    public ArcherismBasicCommand(String command, ArcherismDao dao) {
+        super(command);
+        this.dao = dao;
     }
 
     @Override
     public void execute(IMessage input) {
+        List<Archerism> sayings = dao.getArcherisms();
         int rand = new Random().nextInt(sayings.size());
         Archerism randMessage = sayings.get(rand);
         try {
@@ -40,7 +40,8 @@ public class ArcherismBasicCommand extends AbstractMessageCommand {
 
     @Override
     public boolean shouldExecute(IMessage input) {
-        return null != input.getContent() && input.getContent().startsWith(getCommand())
+        String content = input.getContent();
+        return null != content && content.startsWith(getCommand())
                 && configService.isConfiguredForGuild(input.getGuild(), ConfigType.ARCHERISM_COMMAND);
     }
 

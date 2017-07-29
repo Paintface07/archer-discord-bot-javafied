@@ -1,6 +1,7 @@
 package org.kondrak.archer.bot.core.listener;
 
-import org.kondrak.archer.bot.core.ArcherBotContext;
+import org.kondrak.archer.bot.core.Context;
+import org.kondrak.archer.bot.core.ContextBuilder;
 import org.kondrak.archer.bot.core.dao.MessageDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +15,14 @@ import sx.blah.discord.handle.obj.IMessage;
 /**
  * Created by Administrator on 11/3/2016.
  */
-public class MessageListener extends AbstractListener {
+public class MessageListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageListener.class);
 
     private final MessageDao msgDao;
 
-    public MessageListener(ArcherBotContext ctx) {
-        super(ctx);
-        this.msgDao = new MessageDao(ctx.getFactory());
+    public MessageListener() {
+        this.msgDao = new MessageDao(ContextBuilder.getInstance().getFactory());
     }
 
     @EventSubscriber
@@ -30,7 +30,7 @@ public class MessageListener extends AbstractListener {
         IMessage msg = e.getMessage();
         LOG.info("Channel: {} Author: {} - {}", msg.getChannel(),  msg.getAuthor(),  msg);
         msgDao.saveMessage(msg);
-        getRegistry().getCommandsAsList().forEach((cmd) -> {
+        Context.getInstance().getRegistry().getCommandsAsList().forEach((cmd) -> {
             if(cmd.shouldExecute(msg)) {
                 cmd.execute(msg);
             }

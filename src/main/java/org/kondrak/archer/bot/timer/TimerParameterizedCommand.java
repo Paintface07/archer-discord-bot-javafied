@@ -2,7 +2,6 @@ package org.kondrak.archer.bot.timer;
 
 import org.kondrak.archer.bot.configuration.ConfigType;
 import org.kondrak.archer.bot.core.AbstractMessageCommand;
-import org.kondrak.archer.bot.core.ArcherBotContext;
 import org.kondrak.archer.bot.core.util.Emote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +23,8 @@ public class TimerParameterizedCommand extends AbstractMessageCommand {
 
     public static final Logger LOG = LoggerFactory.getLogger(TimerParameterizedCommand.class);
 
-    public TimerParameterizedCommand(ArcherBotContext ctx, String command) {
-        super(ctx, command);
+    public TimerParameterizedCommand(String command) {
+        super(command);
     }
 
     @Override
